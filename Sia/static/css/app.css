@@ -1,0 +1,26 @@
+.contenido {
+    padding-bottom: 20px;
+}
+.footer {
+    background: #fff;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #e7e7e7;
+}
+.logo {
+    background: url("../img/logo.png") no-repeat;
+    display: block;
+    height: 100px;
+    margin-top: 10px;
+    padding-left: 82px;
+    text-transform: uppercase;
+}
+.logo > span {
+    display: inline-block;
+    margin-left: 36px;
+    margin-top: 44px;
+}
+.logo .h5 {
+    color: #1e578d;
+}

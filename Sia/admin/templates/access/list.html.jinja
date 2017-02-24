@@ -1,0 +1,33 @@
+{% extends "main.html.jinja" %}
+{% block header %}{{ super() }}{% endblock %}
+{% block menu %}{{ super() }}{% endblock %}
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-success .alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endwith %}
+    <div class="list-group">
+        {% for database in databases %}
+        <a href="{{ url_for('admin.edit_json', hospital=database) }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            {{ database }}
+        </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block result %}
+    <a href="{{ url_for('admin.create') }}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        Nuevo
+    </a>
+{% endblock %}

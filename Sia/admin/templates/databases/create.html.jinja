@@ -1,0 +1,43 @@
+{% extends "databases/list.html.jinja" %}
+{% block menu %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    {{ super() }}
+{% endblock %}
+{% block result %}
+    <form action="{{ url_for('admin.store') }}" method="post">
+        <div class="form-group">
+            <label for="name">Nombre del establecimiento</label>
+            <input class="form-control" type="text" name="name" id="name">
+        </div>
+        <div class="form-group">
+            <label for="ip">Dirección del servidor de la base origen</label>
+            <input class="form-control" type="text" name="ip" id="ip">
+        </div>
+        <div class="form-group">
+            <label for="port">Puerto del servidor de la base origen</label>
+            <input class="form-control" type="text" name="port" id="port">
+        </div>
+        <div class="form-group">
+            <label for="dbname">Nombre de la base origen</label>
+            <input class="form-control" type="text" name="dbname" id="dbname">
+        </div>
+        <div class="form-group">
+            <label for="ip_dest">Dirección del servidor destino</label>
+            <input class="form-control" type="text" name="ip_dest" id="ip_dest">
+        </div>
+        <div class="form-group">
+            <label for="port_dest">Puerto del servidor de la base origen</label>
+            <input class="form-control" type="text" name="port_dest" id="port_dest">
+        </div>
+        <div class="form-group">
+            <label for="db_dest">Nombre de la base destino</label>
+            <input class="form-control" type="text" name="db_dest" id="db_dest">
+        </div>
+        <button type="submit" name="submit" class="btn btn-default">
+            Guardar
+        </button>
+        <a href="{{ url_for('admin.list_json') }}">Cancelar</a>
+    </form>
+{% endblock %}

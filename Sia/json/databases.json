@@ -1,0 +1,74 @@
+{
+  "Centro de Rehabilitacion": {
+    "db_dest": "",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.121",
+    "ip_dest": "192.168.0.110",
+    "port": "5404",
+    "port_dest": "5432"
+  },
+  "Centro de Salud Mental": {
+    "db_dest": "",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.121",
+    "ip_dest": "192.168.0.110",
+    "port": "5409",
+    "port_dest": "5432"
+  },
+  "Hospital Onativia": {
+    "db_dest": "hospitalonativia",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.121",
+    "ip_dest": "192.168.0.110",
+    "port": "5407",
+    "port_dest": "5432"
+  },
+  "Hospital Ragone": {
+    "db_dest": "hospitalragone",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.121",
+    "ip_dest": "192.168.0.110",
+    "port": "5405",
+    "port_dest": "5432"
+  },
+  "Hospital San Bernardo": {
+    "db_dest": "hospitalsanbernardo",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.121",
+    "ip_dest": "192.168.0.110",
+    "port": "5408",
+    "port_dest": "5432"
+  },
+  "Hospital de Cafayate": {
+    "db_dest": "hospitalcafayate",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.120",
+    "ip_dest": "192.168.0.110",
+    "port": "5403",
+    "port_dest": "5432"
+  },
+  "Hospital de Embarcacion": {
+    "db_dest": "hospitalembarcacion",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.121",
+    "ip_dest": "192.168.0.110",
+    "port": "5406",
+    "port_dest": "5432"
+  },
+  "Hospital de Guemes": {
+    "db_dest": "hospitalguemes",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.120",
+    "ip_dest": "192.168.0.110",
+    "port": "5402",
+    "port_dest": "5432"
+  },
+  "Senior del Milagro": {
+    "db_dest": "hospitaldelmilagro",
+    "dbname": "saltasalud",
+    "ip": "192.168.0.121",
+    "ip_dest": "192.168.0.110",
+    "port": "5401",
+    "port_dest": "5432"
+  }
+}

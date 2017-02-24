@@ -1,0 +1,19 @@
+{% extends "layout.html.jinja" %}
+{% block header %}
+    Bases de Datos para restaurar
+{% endblock %}
+{% block menu %}
+<div class="list-group">
+    {% for database in databases %}
+    <a href="{{ url_for('restaurar.check', hospital=database) }}" class="list-group-item">
+        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+        {{ database }}
+    </a>
+    {% endfor %}
+    <a href="{{ url_for('home.index') }}" class="list-group-item">
+        <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span>
+        Volver
+    </a>
+</div>
+{% endblock %}
+{% block content %}Elige un establecimiento para comenzar{% endblock %}
