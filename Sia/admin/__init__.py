@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from ..forms import Servidor_form, Acceso_form
 from ..modelos.servidores import Servidores
 from ..modelos.accesos import Accesos
@@ -33,7 +33,7 @@ def edit_json(id_servidor):
     """Muestra los datos del hospital"""
     databases = Servidores().get_servidores()
     datos = Servidores().get_servidor(id_servidor)
-    form = Servidor_form(datos)
+    form = Servidor_form(**datos)
     return render_template(
         'databases/edit.html.jinja',
         form=form,
@@ -47,17 +47,22 @@ def update_json():
     """Actualizar json con los hospitales. """
     databases = Servidores().get_servidores()
     form = Servidor_form()
-    Servidores().update_servidor(form)
-    flash('El registro del servidor se actualizó correctamente.')
-    return redirect(url_for('admin.edit_json', hospital=hospital_key))
+    if form.validate_on_submit():
+        if Servidores().update_servidor(form):
+            flash('El establecimiento se actualizó correctamente.', 'success')
+        else:
+            flash('Hubo un error al actualizar el establecimiento', 'error')
+    return redirect(url_for('admin.edit_json', id_servidor=form.id.data))
 
 
 @admin.route('/delete/<id_servidor>')
 def delete(id_servidor):
     """Eliminar establecimiento del registro."""
     databases = Servidores().get_servidores()
-    Servidores().delete(id_servidor)
-    flash('El establecimiento se eliminó correctamente.')
+    if Servidores().delete(id_servidor):
+        flash('El establecimiento se eliminó correctamente.', 'success')
+    else:
+        flash('Hubo un error al eliminar el establecimiento', 'error')
     return redirect(url_for('admin.list_json'))
 
 
@@ -67,7 +72,7 @@ def create():
     databases = Servidores().get_servidores()
     form = Servidor_form()
     return render_template(
-        'admin/databases/create.html.jinja',
+        'databases/create.html.jinja',
         databases=databases,
         form=form
     )
@@ -78,9 +83,17 @@ def store():
     """Crear establecimiento del registro."""
     databases = Servidores().get_servidores()
     form = Servidor_form()
-    Servidores().insert_servidor(form)
-    flash('El establecimiento se creó correctamente.')
-    return redirect(url_for('admin.create'))
+    if form.validate_on_submit():
+        if Servidores().insert_servidor(form):
+            flash('El establecimiento se creó correctamente.', 'success')
+        else:
+            flash('Hubo un error al guardar', 'error')
+        return redirect(url_for('admin.create'))
+    return render_template(
+        'databases/create.html.jinja',
+        databases=databases,
+        form=form
+    )
 
 
 @admin.route('/listaccess')

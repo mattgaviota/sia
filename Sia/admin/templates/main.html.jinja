@@ -1,5 +1,7 @@
-{% extends "index.html.jinja" %}
-{% block header %}{{ super() }}{% endblock %}
+{% extends "layout.html.jinja" %}
+{% block header %}
+    Sistema Interno de Administración
+{% endblock %}
 {% block menu %}
 <div class="list-group">
     <a href="{{ url_for('admin.list_json') }}" class="list-group-item">Actualizar datos de hospitales</a>
