@@ -9,9 +9,13 @@ class Servidores(object):
     def __init__(self):
         self.db = DB
         self.guarded = ['id', 'clean_db', 'csrf_token']
+        self.restricted = ['id_acceso', 'id_servidor_destino']
 
     def get_servidores(self):
-        rows = self.db(self.db.servidores.id > 0).select()
+        rows = self.db(self.db.servidores.id > 0).select(
+            orderby=self.db.servidores.name,
+            cacheable=True
+        )
         return rows
 
     def get_servidor(self, id):
@@ -22,6 +26,9 @@ class Servidores(object):
         data = data.data
         for field in self.guarded:
             data.pop(field)
+        for field in self.restricted:
+            if not data[field]:
+                data.pop(field)
         return data
 
     def insert_servidor(self, data):

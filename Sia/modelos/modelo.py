@@ -20,18 +20,9 @@ MIGRATE = False
 DB.define_table(
     'accesos',
     Field('id', type='id'),
+    Field('name', type='string', length=100),
     Field('username', type='string', length=50),
     Field('password', type='string', length=50),
-    Field('created_at', type='datetime'),
-    Field('updated_at', type='datetime'),
-    migrate=MIGRATE
-)
-
-DB.define_table(
-    'accesos_servidores',
-    Field('id', type='id'),
-    Field('id_servidor', type='reference servidores', unique=True),
-    Field('id_acceso', type='reference accesos', unique=True),
     Field('created_at', type='datetime'),
     Field('updated_at', type='datetime'),
     migrate=MIGRATE
@@ -44,9 +35,9 @@ DB.define_table(
     Field('ip', type='string', length=20),
     Field('port', type='string', length=5),
     Field('dbname', type='string', length=50),
-    Field('ip_dest', type='string', length=20),
-    Field('port_dest', type='string', length=5),
     Field('db_dest', type='string', length=50),
+    Field('id_servidor_destino', type='reference servidores'),
+    Field('id_acceso', type='reference accesos'),
     Field('created_at', type='datetime'),
     Field('updated_at', type='datetime'),
     migrate=MIGRATE

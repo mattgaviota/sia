@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, HiddenField
+from wtforms import StringField, BooleanField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 
 
@@ -19,23 +19,27 @@ class Servidor_form(FlaskForm):
         'Puerto del servidor de la base origen',
         validators=[DataRequired(message="Este campo es requerido")]
     )
-    dbname = StringField(
-        'Nombre de la base origen',
-        validators=[DataRequired(message="Este campo es requerido")]
-    )
-    ip_dest = StringField(
-        'Dirección del servidor destino',
-        validators=[DataRequired(message="Este campo es requerido")]
-    )
-    port_dest = StringField(
-        'Puerto del servidor de la base origen',
-        validators=[DataRequired(message="Este campo es requerido")]
-    )
+    dbname = StringField('Nombre de la base origen')
     db_dest = StringField('Nombre de la base destino')
+    id_servidor_destino = SelectField(
+        'Servidor Destino',
+        coerce=int,
+        description='Elija un servidor'
+    )
+    id_acceso = SelectField(
+        'Datos de Acceso',
+        coerce=int,
+        description='Elija un acceso'
+    )
     clean_db = BooleanField('Recrear la DB destino')
 
 
 class Acceso_form(FlaskForm):
+    id = HiddenField('id')
+    name = StringField(
+        'Nombre del acceso',
+        validators=[DataRequired()]
+    )
     username = StringField(
         'Usuario de acceso',
         validators=[DataRequired()]

@@ -2,7 +2,35 @@
 {% block header %}{{ super() }}{% endblock %}
 {% block menu %}{{ super() }}{% endblock %}
 {% block content %}
-    {% with messages = get_flashed_messages() %}
+    {% if form and form.errors %}
+        <div class="alert alert-warning .alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
+                {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                    {% for error in field_errors %}
+                        <li>{{ form[field_name].label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+        <div class="alert alert-warning .alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% with messages = get_flashed_messages(category_filter=["success"]) %}
         {% if messages %}
         <div class="alert alert-success .alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -17,17 +45,17 @@
         {% endif %}
     {% endwith %}
     <div class="list-group">
-        {% for database in databases %}
-        <a href="{{ url_for('admin.edit_json', hospital=database) }}" class="list-group-item">
+        {% for acceso in accesos %}
+        <a href="{{ url_for('admin.edit_access', id_acceso=acceso.id) }}" class="list-group-item">
             <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-            {{ database }}
+            {{ acceso.name }}
         </a>
         {% endfor %}
     </div>
 {% endblock %}
 {% block result %}
-    <a href="{{ url_for('admin.create') }}" class="btn btn-success">
-        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-        Nuevo
-    </a>
+<a href="{{ url_for('admin.create_access') }}" class="btn btn-success">
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+    Nuevo
+</a>
 {% endblock %}

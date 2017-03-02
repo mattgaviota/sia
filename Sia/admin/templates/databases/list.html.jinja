@@ -46,7 +46,7 @@
     {% endwith %}
     <div class="list-group">
         {% for database in databases %}
-        <a href="{{ url_for('admin.edit_json', id_servidor=database.id) }}" class="list-group-item">
+        <a href="{{ url_for('admin.edit', id_servidor=database.id) }}" class="list-group-item">
             <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
             {{ database.name }}
         </a>

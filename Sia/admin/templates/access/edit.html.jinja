@@ -1,33 +1,62 @@
-{% extends "main.html.jinja" %}
-{% block header %}{{ super() }}{% endblock %}
+{% extends "access/list.html.jinja" %}
 {% block menu %}{{ super() }}{% endblock %}
 {% block content %}
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+        <div class="alert alert-warning .alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% with messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if messages %}
+        <div class="alert alert-success .alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% for acceso in accesos %}
+    <a  {% if active == acceso.id %} class="list-group-item active"{% else %}
+        class="list-group-item" {% endif %}
+        href="{{ url_for('admin.edit_access', id_acceso=acceso.id) }}">
+        {{ acceso.name }}
+    </a>
+    {% endfor %}
+{% endblock %}
+{% block result %}
     <form action="{{ url_for('admin.update_access') }}" method="post">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="alert alert-success .alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+            {% if field.type == "StringField" %}
+                <div class="form-group">
+                    {{ field.label}}
+                    {{ field(size=50) }}
+                </div>
             {% endif %}
-        {% endwith %}
-        <div class="form-group">
-            <label for="userdb">Usuario</label>
-            <input class="form-control" type="text" name="userdb" id="userdb" value="{{ user }}">
-        </div>
-        <div class="form-group">
-            <label for="passw">Dirección del servidor de la base origen</label>
-            <input class="form-control" type="text" name="passw" id="passw" value="{{ passw }}">
-        </div>
+        {% endfor %}
         <button type="submit" name="submit" class="btn btn-default">
-            Guardar
+            Actualizar
         </button>
-        <a href="{{ url_for('admin.index') }}">Cancelar</a>
+        <a href="{{ url_for('admin.list_access') }}">Cancelar</a>
+        <div class="col-md-offset-9">
+            <a class="btn btn-danger" href="{{ url_for('admin.delete_access', id_acceso=active) }}">
+                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                Eliminar
+            </a>
+        </div>
     </form>
 {% endblock %}
