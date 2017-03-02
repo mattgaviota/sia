@@ -5,9 +5,9 @@
 {% block menu %}
 <div class="list-group">
     {% for database in databases %}
-    <a href="{{ url_for('restaurar.check', hospital=database) }}" class="list-group-item">
+    <a href="{{ url_for('restaurar.check', id_servidor=database.id) }}" class="list-group-item">
         <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-        {{ database }}
+        {{ database.name }}
     </a>
     {% endfor %}
     <a href="{{ url_for('home.index') }}" class="list-group-item">

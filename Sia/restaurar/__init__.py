@@ -23,12 +23,14 @@ def index():
 def check(id_servidor):
     """Muestra los datos del hospital"""
     databases = Servidores().get_servidores()
-    form = Servidor_form(databases, db_clean=False)
+    datos = Servidores().get_servidor(id_servidor)
+    datos['db_clean'] = False
+    form = Servidor_form(**datos)
     return render_template(
         'restaurar/check.html.jinja',
         form=form,
         databases=databases,
-        active=hospital
+        active=id_servidor
     )
 
 

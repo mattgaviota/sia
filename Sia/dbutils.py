@@ -13,7 +13,7 @@ class DButils(object):
         self.host = kwargs['host']
         self.port = kwargs['port']
         self.dbname = kwargs['dbname']
-        self.data = Datautils()
+        self.servidor = Servidores()
         self.utils = Utils()
         self.dbschemas = 'public'
 
