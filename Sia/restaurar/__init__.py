@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
-from ..dbutils import Handler
+from ..lib.dbutils import Handler
 from ..forms import Servidor_form
 from ..modelos.servidores import Servidores
 
@@ -39,12 +39,18 @@ def validate():
     """Llama al script que valida la restauración. """
     databases = Servidores().get_servidores()
     form = Servidor_form()
-    pasos = Handler(form).validar_script()
+    del form.id_acceso
+    del form.id_servidor_destino
+    if form.validate_on_submit():
+        srv_origen = Servidores().get_servidor(form.id.data)
+        srv_destino = Servidores().get_servidor(srv_origen.id_servidor_destino)
+        pasos = Handler(srv_origen, srv_destino, form).validar_script()
     return render_template(
         'restaurar/result.html.jinja',
         form=form,
         databases=databases,
-        pasos=pasos
+        pasos=pasos,
+        active=srv_origen.id
     )
 
 
@@ -53,7 +59,10 @@ def restore():
     """Llama al script que realiza la restauración. """
     databases = Servidores().get_servidores()
     form = Servidor_form()
-    result = Handler(form).restaurar_db()
+    # TODO: Revisar el checkbox clean_db
+    srv_origen = Servidores().get_servidor(form.id.data)
+    srv_destino = Servidores().get_servidor(srv_origen.id_servidor_destino)
+    result = Handler(srv_origen, srv_destino, form).restaurar_db()
     return render_template(
         'restaurar/output.html.jinja',
         form=form,
