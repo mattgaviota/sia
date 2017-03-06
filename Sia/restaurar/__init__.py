@@ -39,6 +39,9 @@ def validate():
     """Llama al script que valida la restauración. """
     databases = Servidores().get_servidores()
     form = Servidor_form()
+    data = form.data
+    if not data['clean_db']:
+        del form.clean_db
     del form.id_acceso
     del form.id_servidor_destino
     if form.validate_on_submit():
@@ -59,7 +62,6 @@ def restore():
     """Llama al script que realiza la restauración. """
     databases = Servidores().get_servidores()
     form = Servidor_form()
-    # TODO: Revisar el checkbox clean_db
     srv_origen = Servidores().get_servidor(form.id.data)
     srv_destino = Servidores().get_servidor(srv_origen.id_servidor_destino)
     result = Handler(srv_origen, srv_destino, form).restaurar_db()
