@@ -1,5 +1,9 @@
 # coding=utf-8
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, abort
+from flask_login import login_user
+from ..forms import Login_form
+from ..libs.utils import Utils
+from ..modelos.users import Users
 
 auth = Blueprint(
     'auth',
@@ -8,10 +12,26 @@ auth = Blueprint(
 )
 
 
-@auth.route('/login')
+def load_user(user_id):
+    return Users().get_user(user_id)
+
+
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    """Login form"""
-    return render_template('login.html.jinja')
+    form = Login_form()
+    if form.validate_on_submit():
+        # TODO: Falta validar usuario https://exploreflask.com/en/latest/users.html
+        login_user(user)
+
+        flash('Logged in successfully.')
+
+        next = request.args.get('next')
+
+        if not Utils().is_safe_url(next):
+            return abort(400)
+
+        return redirect(next or url_for('admin.index'))
+    return render_template('auth/login.html.jinja', form=form)
 
 
 @auth.route('/register')

@@ -1,5 +1,6 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask_login import login_required
 from ..forms import Servidor_form, Acceso_form
 from ..modelos.servidores import Servidores
 from ..modelos.accesos import Accesos
@@ -13,6 +14,7 @@ admin = Blueprint(
 
 
 @admin.route('/')
+@login_required
 def index():
     """admin page"""
     return render_template('main.html.jinja')

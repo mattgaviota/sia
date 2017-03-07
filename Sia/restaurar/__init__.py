@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
-from ..lib.dbutils import Handler
+from ..libs.dbutils import Handler
 from ..forms import Servidor_form
 from ..modelos.servidores import Servidores
 

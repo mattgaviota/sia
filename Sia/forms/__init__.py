@@ -1,6 +1,7 @@
 # coding=utf-8
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, HiddenField, SelectField
+from wtforms import StringField, BooleanField, HiddenField
+from wtforms import SelectField, PasswordField
 from wtforms.validators import DataRequired
 
 
@@ -46,5 +47,16 @@ class Acceso_form(FlaskForm):
     )
     password = StringField(
         'Contraseña de acceso',
+        validators=[DataRequired()]
+    )
+
+
+class Login_form(FlaskForm):
+    username = StringField(
+        'Usuario',
+        validators=[DataRequired()]
+    )
+    password = PasswordField(
+        'Contraseña',
         validators=[DataRequired()]
     )
