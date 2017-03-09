@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, HiddenField
 from wtforms import SelectField, PasswordField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, EqualTo
 
 
 class Servidor_form(FlaskForm):
@@ -39,24 +39,52 @@ class Acceso_form(FlaskForm):
     id = HiddenField('id')
     name = StringField(
         'Nombre del acceso',
-        validators=[DataRequired()]
+        validators=[DataRequired(message="Este campo es requerido")]
     )
     username = StringField(
         'Usuario de acceso',
-        validators=[DataRequired()]
+        validators=[DataRequired(message="Este campo es requerido")]
     )
     password = StringField(
         'Contraseña de acceso',
-        validators=[DataRequired()]
+        validators=[DataRequired(message="Este campo es requerido")]
     )
 
 
 class Login_form(FlaskForm):
     username = StringField(
         'Usuario',
-        validators=[DataRequired()]
+        validators=[DataRequired(message="Este campo es requerido")]
     )
     password = PasswordField(
         'Contraseña',
-        validators=[DataRequired()]
+        validators=[DataRequired(message="Este campo es requerido")]
     )
+
+
+class User_form(FlaskForm):
+    id = HiddenField('id')
+    name = StringField(
+        'Nombre',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    last_name = StringField(
+        'Apellido',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    login = StringField(
+        'Nombre de Usuario',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    password = PasswordField(
+        'Contraseña',
+        validators=[
+            DataRequired(message="Este campo es requerido"),
+            EqualTo('password_rep', message="Las contraseñas deben coincidir")
+        ]
+    )
+    password_rep = PasswordField(
+        'Vuelva a escribir la Contraseña',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    is_admin = BooleanField('Es administrador')

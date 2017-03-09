@@ -1,34 +1,8 @@
 {% extends "access/list.html.jinja" %}
 {% block menu %}{{ super() }}{% endblock %}
 {% block content %}
-    {% with messages = get_flashed_messages(category_filter=["error"]) %}
-        {% if messages %}
-        <div class="alert alert-warning .alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-    {% endwith %}
-    {% with messages = get_flashed_messages(category_filter=["success"]) %}
-        {% if messages %}
-        <div class="alert alert-success .alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-    {% endwith %}
+    {% include 'form_errors.html.jinja' %}
+    {% include 'messages.html.jinja' %}
     {% for acceso in accesos %}
     <a  {% if active == acceso.id %} class="list-group-item active"{% else %}
         class="list-group-item" {% endif %}

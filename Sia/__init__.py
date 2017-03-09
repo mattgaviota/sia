@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # coding=utf-8
 """Restaurador de base de datos basada en Flask"""
-from flask import Flask, url_for
-from flask_bcrypt import Bcrypt
+from flask import Flask, url_for, flash, redirect
 from flask_login import LoginManager
 from config import config
 from .home import home
 from .admin import admin
 from .auth import auth
+from .modelos.users import Users
 from .restaurar import restaurar
 
 login_manager = LoginManager()
@@ -23,9 +23,10 @@ def create_app(config_name):
     app.register_blueprint(restaurar, url_prefix='/restaurar')
     app.register_blueprint(admin, url_prefix='/admin')
     login_manager.login_view = 'auth.login'
+    login_manager.use_session_for_next = True
+    login_manager.login_message = 'Necesitas loguearte para acceder'
     return app
 
-bcrypt = Bcrypt(app)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -34,4 +35,4 @@ def load_user(user_id):
     :param user_id: username
     :return: user or none
     """
-    return auth.load_user(user_id)
+    return Users().get_user(user_id=user_id)
