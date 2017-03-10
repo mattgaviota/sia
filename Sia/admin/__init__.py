@@ -1,5 +1,6 @@
 # coding=utf-8
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash
+from flask import redirect, url_for, current_app
 from flask_login import login_required
 from ..forms import Servidor_form, Acceso_form
 from ..modelos.servidores import Servidores
@@ -21,6 +22,7 @@ def index():
 
 
 @admin.route('/list')
+@login_required
 def list():
     """ Listar establecimientos. """
     databases = Servidores().get_servidores()
@@ -31,6 +33,7 @@ def list():
 
 
 @admin.route('/create')
+@login_required
 def create():
     """ Formulario de creacion de un establecimiento. """
     databases = Servidores().get_servidores()
@@ -49,6 +52,7 @@ def create():
 
 
 @admin.route('/store', methods=['POST'])
+@login_required
 def store():
     """Crear establecimiento del registro."""
     databases = Servidores().get_servidores()
@@ -73,6 +77,7 @@ def store():
 
 
 @admin.route('/edit/<id_servidor>')
+@login_required
 def edit(id_servidor):
     """ Muestra los datos del hospital para editarlos. """
     databases = Servidores().get_servidores()
@@ -93,6 +98,7 @@ def edit(id_servidor):
 
 
 @admin.route('/update', methods=['POST'])
+@login_required
 def update():
     """ Actualiza los datos de un establecimiento. """
     form = Servidor_form()
@@ -111,6 +117,7 @@ def update():
 
 
 @admin.route('/delete/<id_servidor>')
+@login_required
 def delete(id_servidor):
     """ Eliminar establecimiento. """
     if Servidores().delete(id_servidor):
@@ -122,6 +129,7 @@ def delete(id_servidor):
 
 # Accesos
 @admin.route('/listaccess')
+@login_required
 def list_access():
     """ Listar datos de accesos a las bases de datos. """
     accesos = Accesos().get_accesos()
@@ -132,6 +140,7 @@ def list_access():
 
 
 @admin.route('/createaccess')
+@login_required
 def create_access():
     """Formulario de creación de accesos."""
     accesos = Accesos().get_accesos()
@@ -144,6 +153,7 @@ def create_access():
 
 
 @admin.route('/storeaccess', methods=['POST'])
+@login_required
 def store_access():
     """Crear accesos."""
     accesos = Accesos().get_accesos()
@@ -162,6 +172,7 @@ def store_access():
 
 
 @admin.route('/editaccess/<id_acceso>')
+@login_required
 def edit_access(id_acceso):
     """Muestra los datos de acceso para editarlos. """
     accesos = Accesos().get_accesos()
@@ -176,6 +187,7 @@ def edit_access(id_acceso):
 
 
 @admin.route('/updateaccess', methods=['POST'])
+@login_required
 def update_access():
     """ Actualiza los datos de acceso a las bases de datos. """
     form = Acceso_form()
@@ -188,6 +200,7 @@ def update_access():
 
 
 @admin.route('/deleteaccess/<id_acceso>')
+@login_required
 def delete_access(id_acceso):
     """Eliminar acceso."""
     if Accesos().delete(id_acceso):

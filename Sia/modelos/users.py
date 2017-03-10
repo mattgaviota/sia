@@ -6,24 +6,21 @@ from flask import current_app
 from flask_bcrypt import Bcrypt
 
 class Users(object):
-    # TODO: Completar con los metodos requeridos por flask_login
     def __init__(self):
         self.db = DB
         self.guarded = ['id', 'csrf_token', 'password_rep']
         self.bcrypt = Bcrypt(current_app)
-        self.active = False
-        self.authenticated = False
 
     def is_correct_password(self, plaintext):
         return self.bcrypt.check_password_hash(self.password, plaintext)
 
     @property
     def is_active(self):
-        return self._is_active
+        return True
 
     @property
     def is_authenticated(self):
-        return self._is_authenticated
+        return True
 
     @property
     def is_anonymous(self):
@@ -31,9 +28,6 @@ class Users(object):
 
     def get_id(self):
         return str(self.user_id)
-
-    def set_authenticated(self):
-        self._is_authenticated = True
 
     def clean_data(self, data):
         data = data.data
@@ -51,12 +45,11 @@ class Users(object):
         if username:
             row = self.db(self.db.users.login == username).select().first()
         if row:
-            self.user_id = user_id
+            self.user_id = row.id
             self.username = row.login
             self.name = row.name + ' ' + row.last_name
             self.password = row.password
             self.is_admin = row.is_admin
-            self._is_active = True
             return self
         else:
             return None

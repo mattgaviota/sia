@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding=utf-8
 """Restaurador de base de datos basada en Flask"""
-from flask import Flask, url_for, flash, redirect
+from flask import Flask, url_for, flash, redirect, current_app, session
 from flask_login import LoginManager
 from config import config
 from .home import home
@@ -23,7 +23,6 @@ def create_app(config_name):
     app.register_blueprint(restaurar, url_prefix='/restaurar')
     app.register_blueprint(admin, url_prefix='/admin')
     login_manager.login_view = 'auth.login'
-    login_manager.use_session_for_next = True
     login_manager.login_message = 'Necesitas loguearte para acceder'
     return app
 

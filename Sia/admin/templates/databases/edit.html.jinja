@@ -1,7 +1,7 @@
 {% extends "databases/list.html.jinja" %}
 {% block menu %}{{ super() }}{% endblock %}
 {% block content %}
-    {% include 'messages.html.jinja'}
+    {% include 'messages.html.jinja' %}
     {% for database in databases %}
     <a  {% if active == database.id %} class="list-group-item active"{% else %}
         class="list-group-item" {% endif %}

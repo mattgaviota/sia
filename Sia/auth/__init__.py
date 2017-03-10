@@ -1,10 +1,11 @@
 # coding=utf-8
 from flask import Blueprint, render_template, url_for, flash
-from flask import request, redirect, abort, current_app
-from flask_login import login_user, login_required
+from flask import request, redirect, abort, session, current_app
+from flask_login import login_user, login_required, logout_user
 from ..forms import Login_form, User_form
 from ..libs.utils import Utils
 from ..modelos.users import Users
+from logging import debug
 
 auth = Blueprint(
     'auth',
@@ -12,6 +13,7 @@ auth = Blueprint(
     template_folder='templates'
 )
 
+USE_SESSION_FOR_NEXT = False
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -20,15 +22,23 @@ def login():
         user = Users().get_user(username=form.username.data)
         if user:
             if user.is_correct_password(form.password.data):
-                user.set_authenticated()
                 login_user(user)
+                session['username'] = 'mattgaviota'
                 flash(
-                    'Ha ingresado correctamente. %s'.format(user.get_name()),
+                    'Ha ingresado correctamente.',
                     'success'
                 )
-                return redirect(url_for('admin.index'))
-        flash('usuario y/o password incorrecto', 'error')
-        return redirect(url_for('home.index'))
+                next = session.get('next')
+                current_app.logger.debug(next)
+                if not Utils().is_safe_url(next):
+                    return abort(400)
+                return redirect(next or url_for('home.index'))
+            else:
+                flash('usuario y/o password incorrecto', 'error')
+                return redirect(url_for('home.index'))
+        else:
+            flash('usuario y/o password incorrecto', 'error')
+            return redirect(url_for('home.index'))
     return render_template('auth/login.html.jinja', form=form)
 
 
@@ -47,4 +57,6 @@ def register():
 @login_required
 def logout():
     """ Método que realiza el logout. """
-    return redirect(url_for('auth.login'))
+    logout_user()
+    flash('Has salido correctamente.', 'success')
+    return redirect(url_for('home.index'))

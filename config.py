@@ -2,6 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    USE_SESSION_FOR_NEXT = True
 
 class Development(Config):
     DEBUG = True
@@ -16,6 +17,5 @@ config = {
     'development': Development,
     'testing': Testing,
     'production': Production,
-
     'default': Development
 }
