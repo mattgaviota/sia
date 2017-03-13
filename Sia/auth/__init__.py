@@ -5,7 +5,6 @@ from flask_login import login_user, login_required, logout_user
 from ..forms import Login_form, User_form
 from ..libs.utils import Utils
 from ..modelos.users import Users
-from logging import debug
 
 auth = Blueprint(
     'auth',
@@ -54,6 +53,15 @@ def register():
 @login_required
 def logout():
     """ Método que realiza el logout. """
+    logout_user()
+    flash('Has salido correctamente.', 'success')
+    return redirect(url_for('home.index'))
+
+
+@auth.route('/change_pass')
+@login_required
+def change_pass():
+    """ Método que realiza el cambio de password. """
     logout_user()
     flash('Has salido correctamente.', 'success')
     return redirect(url_for('home.index'))
