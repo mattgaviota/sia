@@ -13,36 +13,33 @@ auth = Blueprint(
     template_folder='templates'
 )
 
-USE_SESSION_FOR_NEXT = False
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    next = request.args.get('next')
     form = Login_form()
     if form.validate_on_submit():
         user = Users().get_user(username=form.username.data)
         if user:
             if user.is_correct_password(form.password.data):
                 login_user(user)
-                session['username'] = 'mattgaviota'
                 flash(
                     'Ha ingresado correctamente.',
                     'success'
                 )
-                next = session.get('next')
-                current_app.logger.debug(next)
+                next = request.form['next']
                 if not Utils().is_safe_url(next):
-                    return abort(400)
-                return redirect(next or url_for('home.index'))
-            else:
-                flash('usuario y/o password incorrecto', 'error')
-                return redirect(url_for('home.index'))
+                    return redirect(url_for('home.index'))
+                return redirect(next)
+            flash('usuario y/o password incorrecto', 'error')
         else:
             flash('usuario y/o password incorrecto', 'error')
-            return redirect(url_for('home.index'))
-    return render_template('auth/login.html.jinja', form=form)
+    return render_template('auth/login.html.jinja', form=form, next=next)
 
 
 @auth.route('/register', methods=['GET', 'POST'])
+@login_required
+@is_admin
 def register():
     """ Realiza el registro de un nuevo usuario. """
     form = User_form()

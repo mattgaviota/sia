@@ -2,7 +2,7 @@
 import os
 import tarfile
 from urllib.parse import urlparse, urljoin
-from flask import request, url_for
+from flask import request, url_for, current_app
 
 
 class Utils(object):
@@ -19,6 +19,8 @@ class Utils(object):
         return tarfile_name
 
     def is_safe_url(self, target):
+        if target == 'None':
+            return False
         ref_url = urlparse(request.host_url)
         test_url = urlparse(urljoin(request.host_url, target))
         return test_url.scheme in ('http', 'https') and \
