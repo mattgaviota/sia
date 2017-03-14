@@ -88,3 +88,21 @@ class User_form(FlaskForm):
         validators=[DataRequired(message="Este campo es requerido")]
     )
     is_admin = BooleanField('Es administrador')
+
+
+class Password_form(FlaskForm):
+    password_old = PasswordField(
+        'Contraseña actual',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    password = PasswordField(
+        'Contraseña nueva',
+        validators=[
+            DataRequired(message="Este campo es requerido"),
+            EqualTo('password_rep', message="Las contraseñas deben coincidir")
+        ]
+    )
+    password_rep = PasswordField(
+        'Repetir Contraseña',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )

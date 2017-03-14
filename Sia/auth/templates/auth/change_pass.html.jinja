@@ -1,13 +1,14 @@
-{% extends "main.html.jinja" %}
-{% block header %} Registro de Usuario {% endblock %}
-{% block menu %}{{ super() }}{% endblock %}
+{% extends "layout.html.jinja" %}
+{% block header %} Cambio de Contraseña {% endblock %}
+{% block menu %}
+{% endblock %}
 {% block content %}
     {% include 'form_errors.html.jinja' %}
     {% include 'messages.html.jinja' %}
-    <form action="{{ url_for('auth.register') }}" method="post">
+    <form action="{{ url_for('auth.change_pass') }}" method="post">
         {{ form.hidden_tag() }}
         {% for field in form %}
-            {% if field.type in ["StringField", "PasswordField"] %}
+            {% if field.type == "PasswordField" %}
                 {% if field.errors %}
                     <div class="form-group has-error">
                 {% else %}
@@ -17,18 +18,10 @@
                         {{ field(size=50, class="form-control") }}
                     </div>
             {% endif %}
-            {% if field.type == "BooleanField" %}
-                <div class="checkbox">
-                    <label for="is_admin">
-                        {{ field }}
-                        <strong>Es administrador?</strong>
-                    </label>
-                </div>
-            {% endif %}
         {% endfor %}
         <button type="submit" name="submit" class="btn btn-default">
             Ingresar
         </button>
-        <a href="{{ url_for('admin.index') }}">Cancelar</a>
+        <a href="{{ url_for('home.index') }}">Cancelar</a>
     </form>
 {% endblock %}

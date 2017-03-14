@@ -29,6 +29,9 @@ class Users(object):
     def get_id(self):
         return str(self.user_id)
 
+    def generate_password(self, plaintext):
+        return self.bcrypt.generate_password_hash(plaintext)
+
     def clean_data(self, data):
         data = data.data
         for field in self.guarded:
@@ -58,7 +61,7 @@ class Users(object):
         data = self.clean_data(data)
         data['created_at'] = datetime.now()
         data['updated_at'] = datetime.now()
-        data['password'] = self.bcrypt.generate_password_hash(data['password'])
+        data['password'] = self.generate_password(data['password'])
         id_user = None
         try:
             id_user = self.db.users.insert(**data)
@@ -74,6 +77,22 @@ class Users(object):
         result = 0
         try:
             self.db(self.db.users.id == id_user).update(**data)
+            self.db.commit()
+            result = 1
+        except IntegrityError:
+            self.db.rollback()
+        return result
+
+    def update_password(self, data):
+        data = data.data
+        if not self.is_correct_password(data['password_old']):
+            return False
+        pass_reg = {}
+        pass_reg['updated_at'] = datetime.now()
+        pass_reg['password'] = self.generate_password(data['password'])
+        result = 0
+        try:
+            self.db(self.db.users.id == self.user_id).update(**pass_reg)
             self.db.commit()
             result = 1
         except IntegrityError:

@@ -1,8 +1,8 @@
 # coding=utf-8
 from flask import Blueprint, render_template, url_for, flash
 from flask import request, redirect, abort, session, current_app
-from flask_login import login_user, login_required, logout_user
-from ..forms import Login_form, User_form
+from flask_login import login_user, login_required, logout_user, current_user
+from ..forms import Login_form, User_form, Password_form
 from ..libs.utils import Utils
 from ..libs import is_admin
 from ..modelos.users import Users
@@ -18,6 +18,7 @@ auth = Blueprint(
 def login():
     next = request.args.get('next')
     form = Login_form()
+    password = Users().generate_password('albatr05')
     if form.validate_on_submit():
         user = Users().get_user(username=form.username.data)
         if user:
@@ -34,7 +35,7 @@ def login():
             flash('usuario y/o password incorrecto', 'error')
         else:
             flash('usuario y/o password incorrecto', 'error')
-    return render_template('auth/login.html.jinja', form=form, next=next)
+    return render_template('auth/login.html.jinja', form=form, next=next, password=password)
 
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -59,10 +60,15 @@ def logout():
     return redirect(url_for('home.index'))
 
 
-@auth.route('/change_pass')
+@auth.route('/change_pass', methods=['GET', 'POST'])
 @login_required
 def change_pass():
     """ Método que realiza el cambio de password. """
-    logout_user()
-    flash('Has salido correctamente.', 'success')
-    return redirect(url_for('home.index'))
+    form = Password_form()
+    if form.validate_on_submit():
+        if current_user.update_password(form):
+            flash('Registrado correctamente.', 'success')
+            logout_user()
+            return redirect(url_for('home.index'))
+        flash('La contraseña actual no corresponde al usuario.', 'error')
+    return render_template('auth/change_pass.html.jinja', form=form)

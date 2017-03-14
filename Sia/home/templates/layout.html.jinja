@@ -49,7 +49,7 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Cambiar Password</a></li>
+                                        <li><a href="{{ url_for('auth.change_pass') }}">Cambiar Password</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="{{ url_for('auth.logout') }}">Salir</a></li>
                                     </ul>
@@ -89,7 +89,7 @@
                 <div class="col-md-4">
                     <h4>Datos del sistema</h4>
                     <p class="small">
-                        Versión: 1.5.0 &copy; 2017<br>
+                        Versión: 1.6.0 &copy; 2017<br>
                         <a href="http://www.digio.com.ar" target="_blank">Desarrollo por: Digio S.R.L</a><br>
                         Resolución: optimizado para 1024x768 o superior.<br>
                         <a href="http://getbootstrap.com/getting-started/#support-browsers" target="_blank">Navegadores soportados</a>
