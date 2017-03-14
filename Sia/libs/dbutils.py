@@ -133,12 +133,15 @@ class Handler(object):
             dbname=servidor_origen.dbname,
             id_acceso=servidor_origen.id_acceso
         )
-        self.destino = DButils(
-            host=servidor_destino.ip,
-            port=servidor_destino.port,
-            dbname=form.db_dest.data,
-            id_acceso=servidor_destino.id_acceso
-        )
+        if servidor_destino:
+            self.destino = DButils(
+                host=servidor_destino.ip,
+                port=servidor_destino.port,
+                dbname=form.db_dest.data,
+                id_acceso=servidor_destino.id_acceso
+            )
+        else:
+            self.destino = None
         self.hospital = servidor_origen.name
         try:
             self.clean_db = form.clean_db.data
@@ -147,6 +150,8 @@ class Handler(object):
 
     def validar_script(self):
         """ Valida los pasos a seguir en el script. """
+        if not self.destino:
+            return ['No se cargo el servidor destino en ese establecimiento']
         messages = []
         if not self.origen.exists_host():
             messages.append("""

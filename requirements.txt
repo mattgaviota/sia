@@ -1,0 +1,7 @@
+Flask==0.12
+Flask_Bcrypt==0.7.1
+Flask_Login==0.4.0
+Flask_WTF==0.14.2
+pyDAL==16.3
+WTForms==2.1
+psycopg2==2.7.1

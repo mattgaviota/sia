@@ -4,6 +4,7 @@ from flask import request, redirect, abort, session, current_app
 from flask_login import login_user, login_required, logout_user
 from ..forms import Login_form, User_form
 from ..libs.utils import Utils
+from ..libs import is_admin
 from ..modelos.users import Users
 
 auth = Blueprint(
