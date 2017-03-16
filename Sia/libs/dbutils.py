@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from .utils import Utils
-from ..modelos.servidores import Servidores
+from ..modelos.establecimientos import Establecimientos
 from ..modelos.accesos import Accesos
 import os
 import subprocess
@@ -125,24 +125,24 @@ class DButils(object):
 
 class Handler(object):
     """docstring for Handler."""
-    def __init__(self, servidor_origen, servidor_destino, form):
+    def __init__(self, establecimiento_origen, establecimiento_destino, form):
         super(Handler, self).__init__()
         self.origen = DButils(
-            host=servidor_origen.ip,
-            port=servidor_origen.port,
-            dbname=servidor_origen.dbname,
-            id_acceso=servidor_origen.id_acceso
+            host=establecimiento_origen.ip,
+            port=establecimiento_origen.port,
+            dbname=establecimiento_origen.dbname,
+            id_acceso=establecimiento_origen.id_acceso
         )
-        if servidor_destino:
+        if establecimiento_destino:
             self.destino = DButils(
-                host=servidor_destino.ip,
-                port=servidor_destino.port,
+                host=establecimiento_destino.ip,
+                port=establecimiento_destino.port,
                 dbname=form.db_dest.data,
-                id_acceso=servidor_destino.id_acceso
+                id_acceso=establecimiento_destino.id_acceso
             )
         else:
             self.destino = None
-        self.hospital = servidor_origen.name
+        self.hospital = establecimiento_origen.name
         try:
             self.clean_db = form.clean_db.data
         except AttributeError:
@@ -151,25 +151,25 @@ class Handler(object):
     def validar_script(self):
         """ Valida los pasos a seguir en el script. """
         if not self.destino:
-            return ['No se cargo el servidor destino en ese establecimiento']
+            return ['No se cargo el establecimiento destino en ese establecimiento']
         messages = []
         if not self.origen.exists_host():
             messages.append("""
                 No se puede realizar un backup de la base <strong>{}</strong>
-                del servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+                del establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
             """.format(self.origen.dbname, self.origen.host, self.origen.port))
             return messages
         messages.append("""
             Se realizará un backup de la base <strong>{}</strong>
-            del servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+            del establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
         """.format(self.origen.dbname, self.origen.host, self.origen.port))
         message = """
             Se realizará un backup de la base <strong>{}</strong>
-            del servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+            del establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
         """.format(self.destino.dbname, self.destino.host, self.destino.port)
         if not self.destino.exists_host():
             message = """
-                Se creará la base <strong>{}</strong> del servidor
+                Se creará la base <strong>{}</strong> del establecimiento
                 <strong>{}</strong> en el puerto <strong>{}</strong>.
             """.format(self.destino.dbname, self.destino.host, self.destino.port)
         messages.append(message)
@@ -177,10 +177,10 @@ class Handler(object):
         if self.clean_db:
             clean_db_msg = ''
         message = """
-            Se remplazará {} la base <strong>{}</strong> del servidor
+            Se remplazará {} la base <strong>{}</strong> del establecimiento
             <strong>{}</strong> en el puerto <strong>{}</strong>.
             con el backup de la base <strong>{}</strong>
-            del servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+            del establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
         """.format(
             clean_db_msg,
             self.destino.dbname, self.destino.host, self.destino.port,
@@ -197,7 +197,7 @@ class Handler(object):
             if bkp_dest:
                 message = """
                     Se realizó un backup de la base <strong>{}</strong>
-                    en el servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+                    en el establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
                 """.format(self.destino.dbname, self.destino.host, self.destino.port)
                 messages.append(message)
                 res_create = 1
@@ -209,15 +209,15 @@ class Handler(object):
             if not res_create:
                 message = """
                     Se creó la base <strong>{}</strong>
-                    en el servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+                    en el establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
                 """.format(self.destino.dbname, self.destino.host, self.destino.port)
                 messages.append(message)
             res_restore = self.destino.restore_db(bkp_origen, self.clean_db)
             print(res_restore)
             message = """
                 Se restauró la base <strong>{}</strong> con el backup de la base
-                <strong>{}</strong> del servidor <strong>{}</strong>.
-                En el servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+                <strong>{}</strong> del establecimiento <strong>{}</strong>.
+                En el establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
             """.format(
                 self.destino.dbname, self.origen.dbname, self.origen.host,
                 self.destino.host, self.destino.port
@@ -226,7 +226,7 @@ class Handler(object):
         else:
             messages.append("""
                 No se pudo realizar un backup de la base <strong>{}</strong>
-                en el servidor <strong>{}</strong> en el puerto <strong>{}</strong>.
+                en el establecimiento <strong>{}</strong> en el puerto <strong>{}</strong>.
             """.format(self.origen.dbname, self.origen.host, self.origen.port))
             return messages
         return messages

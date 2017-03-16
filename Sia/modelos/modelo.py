@@ -29,15 +29,39 @@ DB.define_table(
 )
 
 DB.define_table(
-    'servidores',
+    'comandos',
+    Field('id', type='id'),
+    Field('name', type='string', length=20),
+    Field('options', type='string', length=30),
+    Field('title', type='string', length=30),
+    Field('created_at', type='datetime'),
+    Field('updated_at', type='datetime'),
+    migrate=MIGRATE
+)
+
+DB.define_table(
+    'establecimientos',
     Field('id', type='id'),
     Field('name', type='string', length=100, unique=True),
     Field('ip', type='string', length=20),
     Field('port', type='string', length=5),
     Field('dbname', type='string', length=50),
     Field('db_dest', type='string', length=50),
-    Field('id_servidor_destino', type='reference servidores'),
+    Field('id_establecimiento_destino', type='reference establecimientos'),
     Field('id_acceso', type='reference accesos'),
+    Field('created_at', type='datetime'),
+    Field('updated_at', type='datetime'),
+    migrate=MIGRATE
+)
+
+DB.define_table(
+    'servidores',
+    Field('id', type='id'),
+    Field('name', type='string', length=100),
+    Field('host', type='string', length=150, unique=True),
+    Field('port', type='string', length=5, unique=True),
+    Field('id_acceso', type='reference accesos'),
+    Field('last_access', type='datetime'),
     Field('created_at', type='datetime'),
     Field('updated_at', type='datetime'),
     migrate=MIGRATE

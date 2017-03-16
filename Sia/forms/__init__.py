@@ -5,27 +5,27 @@ from wtforms import SelectField, PasswordField
 from wtforms.validators import DataRequired, EqualTo
 
 
-class Servidor_form(FlaskForm):
-    """docstring for Servidor_form."""
+class Establecimiento_form(FlaskForm):
+    """docstring for Establecimiento_form."""
     id = HiddenField('id')
     name = StringField(
         'Nombre del Establecimiento',
         validators=[DataRequired(message="Este campo es requerido")]
     )
     ip = StringField(
-        'Dirección del servidor de la base origen',
+        'Dirección del establecimiento de la base origen',
         validators=[DataRequired(message="Este campo es requerido")]
     )
     port = StringField(
-        'Puerto del servidor de la base origen',
+        'Puerto del establecimiento de la base origen',
         validators=[DataRequired(message="Este campo es requerido")]
     )
     dbname = StringField('Nombre de la base origen')
     db_dest = StringField('Nombre de la base destino')
-    id_servidor_destino = SelectField(
+    id_establecimiento_destino = SelectField(
         'Servidor Destino',
         coerce=int,
-        description='Elija un servidor'
+        description='Elija un establecimiento'
     )
     id_acceso = SelectField(
         'Datos de Acceso',
@@ -105,4 +105,26 @@ class Password_form(FlaskForm):
     password_rep = PasswordField(
         'Repetir Contraseña',
         validators=[DataRequired(message="Este campo es requerido")]
+    )
+
+
+class Servidor_form(FlaskForm):
+    """docstring for Servidor_form."""
+    id = HiddenField('id')
+    name = StringField(
+        'Nombre del Servidor',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    host = StringField(
+        'Dirección remota del servidor',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    port = StringField(
+        'Puerto para acceder al servidor',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    id_acceso = SelectField(
+        'Datos de Acceso',
+        coerce=int,
+        description='Elija un acceso'
     )

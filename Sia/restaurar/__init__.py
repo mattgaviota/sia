@@ -1,8 +1,8 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
 from ..libs.dbutils import Handler
-from ..forms import Servidor_form
-from ..modelos.servidores import Servidores
+from ..forms import Establecimiento_form
+from ..modelos.establecimientos import Establecimientos
 
 
 restaurar = Blueprint(
@@ -15,43 +15,43 @@ restaurar = Blueprint(
 @restaurar.route('/')
 def index():
     """index"""
-    databases = Servidores().get_servidores()
-    return render_template('restaurar/index.html.jinja', databases=databases)
+    establecimientos = Establecimientos().get_establecimientos()
+    return render_template('restaurar/index.html.jinja', establecimientos=establecimientos)
 
 
-@restaurar.route('/chequear/<id_servidor>')
-def check(id_servidor):
+@restaurar.route('/chequear/<id_establecimiento>')
+def check(id_establecimiento):
     """Muestra los datos del hospital"""
-    databases = Servidores().get_servidores()
-    datos = Servidores().get_servidor(id_servidor)
+    establecimientos = Establecimientos().get_establecimientos()
+    datos = Establecimientos().get_establecimiento(id_establecimiento)
     datos['db_clean'] = False
-    form = Servidor_form(**datos)
+    form = Establecimiento_form(**datos)
     return render_template(
         'restaurar/check.html.jinja',
         form=form,
-        databases=databases,
-        active=id_servidor
+        establecimientos=establecimientos,
+        active=id_establecimiento
     )
 
 
 @restaurar.route('/validar', methods=['POST'])
 def validate():
     """Llama al script que valida la restauración. """
-    databases = Servidores().get_servidores()
-    form = Servidor_form()
+    establecimientos = Establecimientos().get_establecimientos()
+    form = Establecimiento_form()
     data = form.data
     if not data['clean_db']:
         del form.clean_db
     del form.id_acceso
-    del form.id_servidor_destino
+    del form.id_establecimiento_destino
     if form.validate_on_submit():
-        srv_origen = Servidores().get_servidor(form.id.data)
-        srv_destino = Servidores().get_servidor(srv_origen.id_servidor_destino)
+        srv_origen = Establecimientos().get_establecimiento(form.id.data)
+        srv_destino = Establecimientos().get_establecimiento(srv_origen.id_establecimiento_destino)
         pasos = Handler(srv_origen, srv_destino, form).validar_script()
     return render_template(
         'restaurar/result.html.jinja',
         form=form,
-        databases=databases,
+        establecimientos=establecimientos,
         pasos=pasos,
         active=srv_origen.id
     )
@@ -60,14 +60,14 @@ def validate():
 @restaurar.route('/restaurar', methods=['POST'])
 def restore():
     """Llama al script que realiza la restauración. """
-    databases = Servidores().get_servidores()
-    form = Servidor_form()
-    srv_origen = Servidores().get_servidor(form.id.data)
-    srv_destino = Servidores().get_servidor(srv_origen.id_servidor_destino)
+    establecimientos = Establecimientos().get_establecimientos()
+    form = Establecimiento_form()
+    srv_origen = Establecimientos().get_establecimiento(form.id.data)
+    srv_destino = Establecimientos().get_establecimiento(srv_origen.id_establecimiento_destino)
     result = Handler(srv_origen, srv_destino, form).restaurar_db()
     return render_template(
         'restaurar/output.html.jinja',
         form=form,
-        databases=databases,
+        establecimientos=establecimientos,
         pasos=result
     )

@@ -1,4 +1,4 @@
-{% extends "databases/list.html.jinja" %}
+{% extends "servidores/list.html.jinja" %}
 {% block menu %}
     {{ super() }}
 {% endblock %}
@@ -6,7 +6,7 @@
     {{ super() }}
 {% endblock %}
 {% block result %}
-    <form action="{{ url_for('admin.store') }}" method="post">
+    <form action="{{ url_for('admin.servidores_store') }}" method="post">
         {{ form.hidden_tag() }}
         {% for field in form %}
             {% if field.type in ["StringField", "SelectField"] %}
@@ -23,6 +23,6 @@
         <button type="submit" name="submit" class="btn btn-default">
             Guardar
         </button>
-        <a href="{{ url_for('admin.list') }}">Cancelar</a>
+        <a href="{{ url_for('admin.servidores_list') }}">Cancelar</a>
     </form>
 {% endblock %}

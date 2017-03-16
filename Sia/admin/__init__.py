@@ -2,9 +2,10 @@
 from flask import Blueprint, render_template, request, flash
 from flask import redirect, url_for, current_app
 from flask_login import login_required
-from ..forms import Servidor_form, Acceso_form
-from ..modelos.servidores import Servidores
+from ..forms import Establecimiento_form, Acceso_form, Servidor_form
+from ..modelos.establecimientos import Establecimientos
 from ..modelos.accesos import Accesos
+from ..modelos.servidores import Servidores
 from ..libs import is_admin
 
 
@@ -23,123 +24,126 @@ def index():
     return render_template('main.html.jinja')
 
 
-@admin.route('/list')
+# Establecimientos
+@admin.route('/establecimientos')
 @login_required
 @is_admin
-def list():
+def establecimientos_list():
     """ Listar establecimientos. """
-    databases = Servidores().get_servidores()
+    establecimientos = Establecimientos().get_establecimientos()
     return render_template(
-        'databases/list.html.jinja',
-        databases=databases
+        'establecimientos/list.html.jinja',
+        establecimientos=establecimientos
     )
 
 
-@admin.route('/create')
+@admin.route('/establecimientos/create')
 @login_required
 @is_admin
-def create():
+def establecimientos_create():
     """ Formulario de creacion de un establecimiento. """
-    databases = Servidores().get_servidores()
-    form = Servidor_form()
+    establecimientos = Establecimientos().get_establecimientos()
+    form = Establecimiento_form()
     form.id_acceso.choices = [(0, 'Ninguno')] + [
         (ac['id'], ac['name']) for ac in Accesos().get_accesos()
     ]
-    form.id_servidor_destino.choices = [(0, 'Ninguno')] + [
-        (ser['id'], ser['name']) for ser in Servidores().get_servidores()
+    form.id_establecimiento_destino.choices = [(0, 'Ninguno')] + [
+        (ser['id'], ser['name']) for ser in Establecimientos().get_establecimientos()
     ]
     return render_template(
-        'databases/create.html.jinja',
-        databases=databases,
+        'establecimientos/create.html.jinja',
+        establecimientos=establecimientos,
         form=form
     )
 
 
-@admin.route('/store', methods=['POST'])
+@admin.route('/establecimientos/store', methods=['POST'])
 @login_required
 @is_admin
-def store():
+def establecimientos_store():
     """Crear establecimiento del registro."""
-    databases = Servidores().get_servidores()
-    form = Servidor_form()
+    establecimientos = Establecimientos().get_establecimientos()
+    form = Establecimiento_form()
     form.id_acceso.choices = [(0, 'Ninguno')] + [
         (ac['id'], ac['name']) for ac in Accesos().get_accesos()
     ]
-    form.id_servidor_destino.choices = [(0, 'Ninguno')] + [
-        (ser['id'], ser['name']) for ser in Servidores().get_servidores()
+    form.id_establecimiento_destino.choices = [(0, 'Ninguno')] + [
+        (ser['id'], ser['name']) for ser in Establecimientos().get_establecimientos()
     ]
     if form.validate_on_submit():
-        if Servidores().insert_servidor(form):
+        if Establecimientos().insert_establecimiento(form):
             flash('El establecimiento se creó correctamente.', 'success')
         else:
             flash('Hubo un error al guardar', 'error')
-        return redirect(url_for('admin.create'))
+        return redirect(url_for('admin.establecimientos_create'))
     return render_template(
-        'databases/create.html.jinja',
-        databases=databases,
+        'establecimientos/create.html.jinja',
+        establecimientos=establecimientos,
         form=form
     )
 
 
-@admin.route('/edit/<id_servidor>')
+@admin.route('/establecimientos/edit/<id_establecimiento>')
 @login_required
 @is_admin
-def edit(id_servidor):
+def establecimientos_edit(id_establecimiento):
     """ Muestra los datos del hospital para editarlos. """
-    databases = Servidores().get_servidores()
-    datos = Servidores().get_servidor(id_servidor)
-    form = Servidor_form(**datos)
+    establecimientos = Establecimientos().get_establecimientos()
+    datos = Establecimientos().get_establecimiento(id_establecimiento)
+    form = Establecimiento_form(**datos)
     form.id_acceso.choices = [(0, 'Ninguno')] + [
         (ac['id'], ac['name']) for ac in Accesos().get_accesos()
     ]
-    form.id_servidor_destino.choices = [(0, 'Ninguno')] + [
-        (ser['id'], ser['name']) for ser in Servidores().get_servidores()
+    form.id_establecimiento_destino.choices = [(0, 'Ninguno')] + [
+        (ser['id'], ser['name']) for ser in Establecimientos().get_establecimientos()
     ]
     return render_template(
-        'databases/edit.html.jinja',
+        'establecimientos/edit.html.jinja',
         form=form,
-        databases=databases,
-        active=id_servidor
+        establecimientos=establecimientos,
+        active=id_establecimiento
     )
 
 
-@admin.route('/update', methods=['POST'])
+@admin.route('/establecimientos/update', methods=['POST'])
 @login_required
 @is_admin
-def update():
+def establecimientos_update():
     """ Actualiza los datos de un establecimiento. """
-    form = Servidor_form()
+    form = Establecimiento_form()
     form.id_acceso.choices = [(0, 'Ninguno')] + [
         (ac['id'], ac['name']) for ac in Accesos().get_accesos()
     ]
-    form.id_servidor_destino.choices = [(0, 'Ninguno')] + [
-        (ser['id'], ser['name']) for ser in Servidores().get_servidores()
+    form.id_establecimiento_destino.choices = [(0, 'Ninguno')] + [
+        (ser['id'], ser['name']) for ser in Establecimientos().get_establecimientos()
     ]
     if form.validate_on_submit():
-        if Servidores().update_servidor(form):
+        if Establecimientos().update_establecimiento(form):
             flash('El establecimiento se actualizó correctamente.', 'success')
         else:
             flash('Hubo un error al actualizar el establecimiento', 'error')
-    return redirect(url_for('admin.edit', id_servidor=form.id.data))
+    return redirect(
+        url_for('admin.establecimientos_edit', id_establecimiento=form.id.data)
+    )
 
 
-@admin.route('/delete/<id_servidor>')
+@admin.route('/establecimientos/delete/<id_establecimiento>')
 @login_required
 @is_admin
-def delete(id_servidor):
+def establecimientos_delete(id_establecimiento):
     """ Eliminar establecimiento. """
-    if Servidores().delete(id_servidor):
+    if Establecimientos().delete(id_establecimiento):
         flash('El establecimiento se eliminó correctamente.', 'success')
     else:
         flash('Hubo un error al eliminar el establecimiento', 'error')
-    return redirect(url_for('admin.list'))
+    return redirect(url_for('admin.establecimientos_list'))
 
 
 # Accesos
-@admin.route('/listaccess')
+@admin.route('/accesos')
 @login_required
 @is_admin
-def list_access():
+def accesos_list():
     """ Listar datos de accesos a las bases de datos. """
     accesos = Accesos().get_accesos()
     return render_template(
@@ -148,10 +152,10 @@ def list_access():
     )
 
 
-@admin.route('/createaccess')
+@admin.route('/accesos/create')
 @login_required
 @is_admin
-def create_access():
+def accesos_create():
     """Formulario de creación de accesos."""
     accesos = Accesos().get_accesos()
     form = Acceso_form()
@@ -162,10 +166,10 @@ def create_access():
     )
 
 
-@admin.route('/storeaccess', methods=['POST'])
+@admin.route('/accesos/store', methods=['POST'])
 @login_required
 @is_admin
-def store_access():
+def accesos_store():
     """Crear accesos."""
     accesos = Accesos().get_accesos()
     form = Acceso_form()
@@ -174,7 +178,7 @@ def store_access():
             flash('El acceso se creó correctamente.', 'success')
         else:
             flash('Hubo un error al guardar', 'error')
-        return redirect(url_for('admin.create_access'))
+        return redirect(url_for('admin.accesos_create'))
     return render_template(
         'access/create.html.jinja',
         accesos=accesos,
@@ -182,10 +186,10 @@ def store_access():
     )
 
 
-@admin.route('/editaccess/<id_acceso>')
+@admin.route('/accesos/edit/<id_acceso>')
 @login_required
 @is_admin
-def edit_access(id_acceso):
+def accesos_edit(id_acceso):
     """Muestra los datos de acceso para editarlos. """
     accesos = Accesos().get_accesos()
     datos = Accesos().get_acceso(id_acceso)
@@ -198,10 +202,10 @@ def edit_access(id_acceso):
     )
 
 
-@admin.route('/updateaccess', methods=['POST'])
+@admin.route('/accesos/update', methods=['POST'])
 @login_required
 @is_admin
-def update_access():
+def accesos_update():
     """ Actualiza los datos de acceso a las bases de datos. """
     form = Acceso_form()
     if form.validate_on_submit():
@@ -209,16 +213,117 @@ def update_access():
             flash('El acceso se actualizó correctamente.', 'success')
         else:
             flash('Hubo un error al actualizar el acceso', 'error')
-    return redirect(url_for('admin.edit_access', id_acceso=form.id.data))
+    return redirect(url_for('admin.accesos_edit', id_acceso=form.id.data))
 
 
-@admin.route('/deleteaccess/<id_acceso>')
+@admin.route('/accesos/delete/<id_acceso>')
 @login_required
 @is_admin
-def delete_access(id_acceso):
+def accesos_delete(id_acceso):
     """Eliminar acceso."""
     if Accesos().delete(id_acceso):
         flash('El acceso se eliminó correctamente.', 'success')
     else:
         flash('Hubo un error al eliminar el acceso', 'error')
-    return redirect(url_for('admin.list_access'))
+    return redirect(url_for('admin.accesos_list'))
+
+
+# Servidores
+@admin.route('/servidores')
+@login_required
+@is_admin
+def servidores_list():
+    """ Listar servidores. """
+    servidores = Servidores().get_servidores()
+    return render_template(
+        'servidores/list.html.jinja',
+        servidores=servidores
+    )
+
+
+@admin.route('/servidores/create')
+@login_required
+@is_admin
+def servidores_create():
+    """ Formulario de creacion de un servidor. """
+    servidores = Servidores().get_servidores()
+    form = Servidor_form()
+    form.id_acceso.choices = [(0, 'Ninguno')] + [
+        (ac['id'], ac['name']) for ac in Accesos().get_accesos()
+    ]
+    return render_template(
+        'servidores/create.html.jinja',
+        servidores=servidores,
+        form=form
+    )
+
+
+@admin.route('/servidores/store', methods=['POST'])
+@login_required
+@is_admin
+def servidores_store():
+    """Crear servidor del registro."""
+    servidores = Servidores().get_servidores()
+    form = Servidor_form()
+    form.id_acceso.choices = [(0, 'Ninguno')] + [
+        (ac['id'], ac['name']) for ac in Accesos().get_accesos()
+    ]
+    if form.validate_on_submit():
+        if Servidores().insert_servidor(form):
+            flash('El servidor se creó correctamente.', 'success')
+        else:
+            flash('Hubo un error al guardar', 'error')
+        return redirect(url_for('admin.servidores_create'))
+    return render_template(
+        'servidores/create.html.jinja',
+        servidores=servidores,
+        form=form
+    )
+
+
+@admin.route('/servidores/edit/<id_servidor>')
+@login_required
+@is_admin
+def servidores_edit(id_servidor):
+    """ Muestra los datos del hospital para editarlos. """
+    servidores = Servidores().get_servidores()
+    datos = Servidores().get_servidor(id_servidor)
+    form = Servidor_form(**datos)
+    form.id_acceso.choices = [(0, 'Ninguno')] + [
+        (ac['id'], ac['name']) for ac in Accesos().get_accesos()
+    ]
+    return render_template(
+        'servidores/edit.html.jinja',
+        form=form,
+        servidores=servidores,
+        active=id_servidor
+    )
+
+
+@admin.route('/servidores/update', methods=['POST'])
+@login_required
+@is_admin
+def servidores_update():
+    """ Actualiza los datos de un servidor. """
+    form = Servidor_form()
+    form.id_acceso.choices = [(0, 'Ninguno')] + [
+        (ac['id'], ac['name']) for ac in Accesos().get_accesos()
+    ]
+    if form.validate_on_submit():
+        if Servidores().update_servidor(form):
+            flash('El servidor se actualizó correctamente.', 'success')
+        else:
+            flash('Hubo un error al actualizar el servidor', 'error')
+    return redirect(url_for('admin.servidores_edit', id_servidor=form.id.data))
+
+
+@admin.route('/servidores/delete/<id_servidor>')
+@login_required
+@is_admin
+def servidores_delete(id_servidor):
+    """ Eliminar servidor. """
+    if Servidores().delete(id_servidor):
+        flash('El servidor se eliminó correctamente.', 'success')
+    else:
+        flash('Hubo un error al eliminar el servidor', 'error')
+    return redirect(url_for('admin.servidores_list'))

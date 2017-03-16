@@ -4,10 +4,10 @@
 {% endblock %}
 {% block menu %}
 <div class="list-group">
-    {% for establecimiento in establecimientos %}
+    {% for database in databases %}
     <a href="{{ url_for('restaurar.check', id_establecimiento=establecimiento.id) }}" class="list-group-item">
         <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-        {{ establecimiento.name }}
+        {{ database.name }}
     </a>
     {% endfor %}
     <a href="{{ url_for('home.index') }}" class="list-group-item">

@@ -5,17 +5,17 @@
     {% include 'form_errors.html.jinja' %}
     {% include 'messages.html.jinja' %}
     <div class="list-group">
-        {% for acceso in accesos %}
-        <a href="{{ url_for('admin.accesos_edit', id_acceso=acceso.id) }}" class="list-group-item">
+        {% for servidor in servidores %}
+        <a href="{{ url_for('admin.servidores_edit', id_servidor=servidor.id) }}" class="list-group-item">
             <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-            {{ acceso.name }}
+            {{ servidor.name }}
         </a>
         {% endfor %}
     </div>
 {% endblock %}
 {% block result %}
-<a href="{{ url_for('admin.accesos_create') }}" class="btn btn-success">
-    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-    Nuevo
-</a>
+    <a href="{{ url_for('admin.servidores_create') }}" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        Nuevo
+    </a>
 {% endblock %}

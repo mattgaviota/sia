@@ -1,32 +1,32 @@
-{% extends "access/list.html.jinja" %}
+{% extends "servidores/list.html.jinja" %}
 {% block menu %}{{ super() }}{% endblock %}
 {% block content %}
     {% include 'messages.html.jinja' %}
-    {% for acceso in accesos %}
-    <a  {% if active == acceso.id %} class="list-group-item active"{% else %}
+    {% for servidor in servidores %}
+    <a  {% if active == servidor.id %} class="list-group-item active"{% else %}
         class="list-group-item" {% endif %}
-        href="{{ url_for('admin.accesos_edit', id_acceso=acceso.id) }}">
-        {{ acceso.name }}
+        href="{{ url_for('admin.servidores_edit', id_servidor=servidor.id) }}">
+        {{ servidor.name }}
     </a>
     {% endfor %}
 {% endblock %}
 {% block result %}
-    <form action="{{ url_for('admin.accesos_update') }}" method="post">
+    <form action="{{ url_for('admin.servidores_update') }}" method="post">
         {{ form.hidden_tag() }}
         {% for field in form %}
-            {% if field.type == "StringField" %}
+            {% if field.type in ["StringField", "SelectField"] %}
                 <div class="form-group">
-                    {{ field.label}}
-                    {{ field(size=50) }}
+                    {{ field.label(class="control-label") }}
+                    {{ field(class="form-control") }}
                 </div>
             {% endif %}
         {% endfor %}
         <button type="submit" name="submit" class="btn btn-default">
             Actualizar
         </button>
-        <a href="{{ url_for('admin.accesos_list') }}">Cancelar</a>
+        <a href="{{ url_for('admin.servidores_list') }}">Cancelar</a>
         <div class="col-md-offset-9">
-            <a class="btn btn-danger" href="{{ url_for('admin.accesos_delete', id_acceso=active) }}">
+            <a class="btn btn-danger" href="{{ url_for('admin.servidores_delete', id_servidor=active) }}">
                 <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                 Eliminar
             </a>
