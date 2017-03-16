@@ -7,8 +7,9 @@ from config import config
 from .home import home
 from .admin import admin
 from .auth import auth
-from .modelos.users import Users
+from .monitorear import monitorear
 from .restaurar import restaurar
+from .modelos.users import Users
 
 login_manager = LoginManager()
 
@@ -21,6 +22,7 @@ def create_app(config_name):
     app.register_blueprint(home)
     app.register_blueprint(auth)
     app.register_blueprint(restaurar, url_prefix='/restaurar')
+    app.register_blueprint(monitorear, url_prefix='/monitorear')
     app.register_blueprint(admin, url_prefix='/admin')
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Necesitas loguearte para acceder'

@@ -1,0 +1,24 @@
+{% extends "monitorear/index.html.jinja" %}
+{% block menu %}
+<div class="list-group">
+    {% for servidor in servidores %}
+    <a  {% if active_servidor == servidor.id %} class="list-group-item active"{% else %}
+        class="list-group-item" {% endif %}
+        href="{{ url_for('monitorear.check', id_servidor=servidor.id) }}">
+        {{ servidor.name }}
+    </a>
+    {% endfor %}
+    <a href="{{ url_for('home.index') }}" class="list-group-item">
+        <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span>
+        Volver
+    </a>
+</div>
+{% endblock %}
+{% block content %}
+    {% for comando in comandos %}
+    <a class="list-group-item"
+        href="{{ url_for('monitorear.ejecutar', id_servidor=active_servidor, id_comando=comando.id) }}">
+        {{ comando.title }}
+    </a>
+    {% endfor %}
+{% endblock %}

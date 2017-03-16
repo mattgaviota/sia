@@ -2,10 +2,12 @@
 from flask import Blueprint, render_template, request, flash
 from flask import redirect, url_for, current_app
 from flask_login import login_required
-from ..forms import Establecimiento_form, Acceso_form, Servidor_form
+from ..forms import Establecimiento_form, Acceso_form
+from ..forms import Servidor_form, Comando_form
 from ..modelos.establecimientos import Establecimientos
 from ..modelos.accesos import Accesos
 from ..modelos.servidores import Servidores
+from ..modelos.comandos import Comandos
 from ..libs import is_admin
 
 
@@ -327,3 +329,92 @@ def servidores_delete(id_servidor):
     else:
         flash('Hubo un error al eliminar el servidor', 'error')
     return redirect(url_for('admin.servidores_list'))
+
+
+# Comandos
+@admin.route('/comandos')
+@login_required
+@is_admin
+def comandos_list():
+    """ Listar datos de comandos. """
+    comandos = Comandos().get_comandos()
+    return render_template(
+        'comandos/list.html.jinja',
+        comandos=comandos
+    )
+
+
+@admin.route('/comandos/create')
+@login_required
+@is_admin
+def comandos_create():
+    """Formulario de creación de comandos."""
+    comandos = Comandos().get_comandos()
+    form = Comando_form()
+    return render_template(
+        'comandos/create.html.jinja',
+        comandos=comandos,
+        form=form
+    )
+
+
+@admin.route('/comandos/store', methods=['POST'])
+@login_required
+@is_admin
+def comandos_store():
+    """Crear comandos."""
+    comandos = Comandos().get_comandos()
+    form = Comando_form()
+    if form.validate_on_submit():
+        if Comandos().insert_comando(form):
+            flash('El comando se creó correctamente.', 'success')
+        else:
+            flash('Hubo un error al guardar', 'error')
+        return redirect(url_for('admin.comandos_create'))
+    return render_template(
+        'comandos/create.html.jinja',
+        comandos=comandos,
+        form=form
+    )
+
+
+@admin.route('/comandos/edit/<id_comando>')
+@login_required
+@is_admin
+def comandos_edit(id_comando):
+    """Muestra los datos de comando para editarlos. """
+    comandos = Comandos().get_comandos()
+    datos = Comandos().get_comando(id_comando)
+    form = Comando_form(**datos)
+    return render_template(
+        'comandos/edit.html.jinja',
+        form=form,
+        comandos=comandos,
+        active=id_comando
+    )
+
+
+@admin.route('/comandos/update', methods=['POST'])
+@login_required
+@is_admin
+def comandos_update():
+    """ Actualiza los datos de comandos. """
+    form = Comando_form()
+    if form.validate_on_submit():
+        if Comandos().update_comando(form):
+            flash('El comando se actualizó correctamente.', 'success')
+        else:
+            flash('Hubo un error al actualizar el comando', 'error')
+    return redirect(url_for('admin.comandos_edit', id_comando=form.id.data))
+
+
+@admin.route('/comandos/delete/<id_comando>')
+@login_required
+@is_admin
+def comandos_delete(id_comando):
+    """Eliminar comando."""
+    if Comandos().delete(id_comando):
+        flash('El comando se eliminó correctamente.', 'success')
+    else:
+        flash('Hubo un error al eliminar el comando', 'error')
+    return redirect(url_for('admin.comandos_list'))

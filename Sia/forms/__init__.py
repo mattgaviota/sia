@@ -128,3 +128,19 @@ class Servidor_form(FlaskForm):
         coerce=int,
         description='Elija un acceso'
     )
+
+
+class Comando_form(FlaskForm):
+    id = HiddenField('id')
+    title = StringField(
+    'Título del comando',
+    validators=[DataRequired(message="Este campo es requerido")]
+    )
+    name = StringField(
+        'Nombre del comando',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    options = StringField(
+        'Opciones del comando',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )

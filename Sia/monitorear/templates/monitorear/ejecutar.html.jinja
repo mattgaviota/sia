@@ -1,0 +1,17 @@
+{% extends "monitorear/check.html.jinja" %}
+{% block menu %}
+    {{ super() }}
+{% endblock menu %}
+{% block content %}
+{% for comando in comandos %}
+<a  {% if active_comando == comando.id %} class="list-group-item active"{% else %}
+    class="list-group-item" {% endif %}
+    href="{{ url_for('monitorear.ejecutar', id_servidor=active_servidor, id_comando=active_comando) }}">
+    {{ comando.title }}
+</a>
+{% endfor %}
+{% endblock content %}
+{% block result %}
+    <h2>Resultado de ejecución:</h2>
+    <code>{{ comando.name + ' ' + comando.options + ' ' + servidor.host}}</code>
+{% endblock result %}

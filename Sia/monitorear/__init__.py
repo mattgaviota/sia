@@ -1,8 +1,10 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
+from flask_login import login_required
 from ..libs.dbutils import Handler
 from ..forms import Servidor_form
 from ..modelos.servidores import Servidores
+from ..modelos.comandos import Comandos
 
 
 monitorear = Blueprint(
@@ -24,50 +26,28 @@ def check(id_servidor):
     """Muestra los datos del hospital"""
     servidores = Servidores().get_servidores()
     datos = Servidores().get_servidor(id_servidor)
-    datos['db_clean'] = False
-    form = Servidor_form(**datos)
+    comandos = Comandos().get_comandos()
     return render_template(
         'monitorear/check.html.jinja',
-        form=form,
         servidores=servidores,
-        active=id_servidor
+        comandos=comandos,
+        active_servidor=id_servidor
     )
 
-
-@monitorear.route('/validar', methods=['POST'])
-def validate():
-    """Llama al script que valida la restauración. """
+@monitorear.route('/ejecutar/<id_servidor>/<id_comando>')
+@login_required
+def ejecutar(id_servidor, id_comando):
+    """ejecutar comando"""
     servidores = Servidores().get_servidores()
-    form = Servidor_form()
-    data = form.data
-    if not data['clean_db']:
-        del form.clean_db
-    del form.id_acceso
-    del form.id_servidor_destino
-    if form.validate_on_submit():
-        srv_origen = Servidores().get_servidor(form.id.data)
-        srv_destino = Servidores().get_servidor(srv_origen.id_servidor_destino)
-        pasos = Handler(srv_origen, srv_destino, form).validar_script()
+    servidor = Servidores().get_servidor(id_servidor)
+    comandos = Comandos().get_comandos()
+    comando = Comandos().get_comando(id_comando)
     return render_template(
-        'monitorear/result.html.jinja',
-        form=form,
+        'monitorear/ejecutar.html.jinja',
         servidores=servidores,
-        pasos=pasos,
-        active=srv_origen.id
-    )
-
-
-@monitorear.route('/monitorear', methods=['POST'])
-def restore():
-    """Llama al script que realiza la restauración. """
-    servidores = Servidores().get_servidores()
-    form = Servidor_form()
-    srv_origen = Servidores().get_servidor(form.id.data)
-    srv_destino = Servidores().get_servidor(srv_origen.id_servidor_destino)
-    result = Handler(srv_origen, srv_destino, form).monitorear_db()
-    return render_template(
-        'monitorear/output.html.jinja',
-        form=form,
-        servidores=servidores,
-        pasos=result
+        servidor=servidor,
+        comandos=comandos,
+        comando=comando,
+        active_servidor=id_servidor,
+        active_comando=id_comando
     )

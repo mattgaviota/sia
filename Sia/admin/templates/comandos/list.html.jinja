@@ -1,0 +1,21 @@
+{% extends "main.html.jinja" %}
+{% block header %}{{ super() }}{% endblock %}
+{% block menu %}{{ super() }}{% endblock %}
+{% block content %}
+    {% include 'form_errors.html.jinja' %}
+    {% include 'messages.html.jinja' %}
+    <div class="list-group">
+        {% for comando in comandos %}
+        <a href="{{ url_for('admin.comandos_edit', id_comando=comando.id) }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            {{ comando.name }}
+        </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block result %}
+<a href="{{ url_for('admin.comandos_create') }}" class="btn btn-success">
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+    Nuevo
+</a>
+{% endblock %}

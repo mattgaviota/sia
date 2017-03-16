@@ -1,13 +1,13 @@
 {% extends "layout.html.jinja" %}
 {% block header %}
-    Bases de Datos para restaurar
+    Servidores remotos
 {% endblock %}
 {% block menu %}
 <div class="list-group">
-    {% for database in databases %}
-    <a href="{{ url_for('restaurar.check', id_establecimiento=establecimiento.id) }}" class="list-group-item">
+    {% for servidor in servidores %}
+    <a href="{{ url_for('monitorear.check', id_servidor=servidor.id) }}" class="list-group-item">
         <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-        {{ database.name }}
+        {{ servidor.name }}
     </a>
     {% endfor %}
     <a href="{{ url_for('home.index') }}" class="list-group-item">
@@ -16,4 +16,4 @@
     </a>
 </div>
 {% endblock %}
-{% block content %}Elige un establecimiento para comenzar{% endblock %}
+{% block content %}Elige un servidor para comenzar{% endblock %}
