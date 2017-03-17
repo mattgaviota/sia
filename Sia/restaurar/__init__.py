@@ -30,7 +30,7 @@ def check(id_establecimiento):
         'restaurar/check.html.jinja',
         form=form,
         establecimientos=establecimientos,
-        active=id_establecimiento
+        active=int(id_establecimiento)
     )
 
 

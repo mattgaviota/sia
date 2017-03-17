@@ -31,7 +31,7 @@ def check(id_servidor):
         'monitorear/check.html.jinja',
         servidores=servidores,
         comandos=comandos,
-        active_servidor=id_servidor
+        active_servidor=int(id_servidor)
     )
 
 @monitorear.route('/ejecutar/<id_servidor>/<id_comando>')
@@ -50,6 +50,6 @@ def ejecutar(id_servidor, id_comando):
         comandos=comandos,
         comando=comando,
         result=result,
-        active_servidor=id_servidor,
-        active_comando=id_comando
+        active_servidor=int(id_servidor),
+        active_comando=int(id_comando)
     )

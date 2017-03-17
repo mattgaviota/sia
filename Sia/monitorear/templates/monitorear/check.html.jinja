@@ -2,9 +2,9 @@
 {% block menu %}
 <div class="list-group">
     {% for servidor in servidores %}
-    <a  {% if active_servidor == servidor.id %} class="list-group-item active"{% else %}
-        class="list-group-item" {% endif %}
-        href="{{ url_for('monitorear.check', id_servidor=servidor.id) }}">
+    <a {% if active_servidor == servidor.id %} class="list-group-item active"{% else %}
+        class="list-group-item" {% endif %} href="{{ url_for('monitorear.check', id_servidor=servidor.id) }}" class="list-group-item">
+        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
         {{ servidor.name }}
     </a>
     {% endfor %}

@@ -144,3 +144,4 @@ class Comando_form(FlaskForm):
         'Opciones del comando',
         validators=[DataRequired(message="Este campo es requerido")]
     )
+    need_sudo = BooleanField('Necesita sudo?')

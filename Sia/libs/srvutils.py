@@ -18,6 +18,9 @@ class Runner(object):
 
     def run(self):
         """ Ejecuta el comando. """
+        sudo = ''
+        if self.comando.need_sudo:
+            sudo = 'sudo'
         try:
             output = subprocess.check_output(
                 [
@@ -26,6 +29,7 @@ class Runner(object):
                     'ssh',
                     '-p', self.servidor.port,
                     self.acceso.username + '@' + self.servidor.host,
+                    sudo,
                     self.comando.name,
                     self.comando.options
                 ]
@@ -33,11 +37,5 @@ class Runner(object):
             output = str(output, 'utf8')
         except subprocess.CalledProcessError:
             output = 'Hubo un error al lanzar el comando.'
-        cmd_run = 'ssh -p {} {}@{} {} {}'.format(
-            self.servidor.port,
-            self.acceso.username,
-            self.servidor.host,
-            self.comando.name,
-            self.comando.options
-        )
+        cmd_run = '{} {}'.format(self.comando.name, self.comando.options)
         return {'output': output, 'cmd_run': cmd_run}

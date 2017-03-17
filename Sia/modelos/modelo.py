@@ -34,6 +34,7 @@ DB.define_table(
     Field('name', type='string', length=20),
     Field('options', type='string', length=30),
     Field('title', type='string', length=30),
+    Field('need_sudo', type='boolean', default=False),
     Field('created_at', type='datetime'),
     Field('updated_at', type='datetime'),
     migrate=MIGRATE
