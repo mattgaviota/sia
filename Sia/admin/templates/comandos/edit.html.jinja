@@ -6,7 +6,8 @@
     <a  {% if active == comando.id %} class="list-group-item active"{% else %}
         class="list-group-item" {% endif %}
         href="{{ url_for('admin.comandos_edit', id_comando=comando.id) }}">
-        {{ comando.name }}
+        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+        {{ comando.title }}
     </a>
     {% endfor %}
 {% endblock %}

@@ -1,7 +1,7 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
 from flask_login import login_required
-from ..libs.dbutils import Handler
+from ..libs.srvutils import Runner
 from ..forms import Servidor_form
 from ..modelos.servidores import Servidores
 from ..modelos.comandos import Comandos
@@ -42,12 +42,14 @@ def ejecutar(id_servidor, id_comando):
     servidor = Servidores().get_servidor(id_servidor)
     comandos = Comandos().get_comandos()
     comando = Comandos().get_comando(id_comando)
+    result = Runner(comando, servidor).run()
     return render_template(
         'monitorear/ejecutar.html.jinja',
         servidores=servidores,
         servidor=servidor,
         comandos=comandos,
         comando=comando,
+        result=result,
         active_servidor=id_servidor,
         active_comando=id_comando
     )

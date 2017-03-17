@@ -8,7 +8,7 @@
         {% for comando in comandos %}
         <a href="{{ url_for('admin.comandos_edit', id_comando=comando.id) }}" class="list-group-item">
             <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-            {{ comando.name }}
+            {{ comando.title }}
         </a>
         {% endfor %}
     </div>
