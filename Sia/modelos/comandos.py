@@ -1,6 +1,6 @@
 # coding=utf-8
 from .modelo import DB
-from psycopg2 import IntegrityError
+from psycopg2 import IntegrityError, DataError
 from datetime import datetime
 
 
@@ -37,6 +37,8 @@ class Comandos(object):
             self.db.commit()
         except IntegrityError:
             self.db.rollback()
+        except DataError:
+            self.db.rollback()
         return id_comando
 
     def update_comando(self, data):
@@ -49,6 +51,8 @@ class Comandos(object):
             self.db.commit()
             result = 1
         except IntegrityError:
+            self.db.rollback()
+        except DataError:
             self.db.rollback()
         return result
 

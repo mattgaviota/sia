@@ -16,8 +16,8 @@
         {% for field in form %}
             {% if field.type == "StringField" %}
                 <div class="form-group">
-                    {{ field.label}}
-                    {{ field(size=50) }}
+                    {{ field.label(class="control-label") }}
+                    {{ field(size=50, class="form-control") }}
                 </div>
             {% endif %}
         {% endfor %}
