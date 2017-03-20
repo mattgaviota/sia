@@ -5,8 +5,6 @@ from ..modelos.accesos import Accesos
 import os
 import subprocess
 
-PATH_SSH_KEY = '/var/www/.ssh/id_rsa'
-
 
 class Runner(object):
     """docstring for Handler."""
