@@ -6,6 +6,7 @@
     <a  {% if active == acceso.id %} class="list-group-item active"{% else %}
         class="list-group-item" {% endif %}
         href="{{ url_for('admin.accesos_edit', id_acceso=acceso.id) }}">
+        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
         {{ acceso.name }}
     </a>
     {% endfor %}

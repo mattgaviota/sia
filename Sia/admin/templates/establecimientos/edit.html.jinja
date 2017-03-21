@@ -6,6 +6,7 @@
     <a  {% if active == establecimiento.id %} class="list-group-item active"{% else %}
         class="list-group-item" {% endif %}
         href="{{ url_for('admin.establecimientos_edit', id_establecimiento=establecimiento.id) }}">
+        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
         {{ establecimiento.name }}
     </a>
     {% endfor %}

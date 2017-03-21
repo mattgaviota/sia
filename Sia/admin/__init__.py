@@ -103,7 +103,7 @@ def establecimientos_edit(id_establecimiento):
         'establecimientos/edit.html.jinja',
         form=form,
         establecimientos=establecimientos,
-        active=id_establecimiento
+        active=int(id_establecimiento)
     )
 
 
@@ -200,7 +200,7 @@ def accesos_edit(id_acceso):
         'access/edit.html.jinja',
         form=form,
         accesos=accesos,
-        active=id_acceso
+        active=int(id_acceso)
     )
 
 
@@ -298,7 +298,7 @@ def servidores_edit(id_servidor):
         'servidores/edit.html.jinja',
         form=form,
         servidores=servidores,
-        active=id_servidor
+        active=int(id_servidor)
     )
 
 
@@ -390,7 +390,7 @@ def comandos_edit(id_comando):
         'comandos/edit.html.jinja',
         form=form,
         comandos=comandos,
-        active=id_comando
+        active=int(id_comando)
     )
 
 
