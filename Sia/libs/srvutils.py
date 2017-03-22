@@ -1,8 +1,6 @@
 # coding=utf-8
 
-from .utils import Utils
 from ..modelos.accesos import Accesos
-import os
 import subprocess
 
 

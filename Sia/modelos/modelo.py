@@ -56,6 +56,18 @@ DB.define_table(
 )
 
 DB.define_table(
+    'revisions',
+    Field('id', type='id'),
+    Field('id_user', type='reference users'),
+    Field('id_type', type='reference types'),
+    Field('id_comando', type='reference comandos'),
+    Field('comentario', type='string', length=150),
+    Field('created_at', type='datetime'),
+    Field('updated_at', type='datetime'),
+    migrate=MIGRATE
+)
+
+DB.define_table(
     'servidores',
     Field('id', type='id'),
     Field('name', type='string', length=100),
@@ -63,6 +75,17 @@ DB.define_table(
     Field('port', type='string', length=5, unique=True),
     Field('id_acceso', type='reference accesos'),
     Field('last_access', type='datetime'),
+    Field('created_at', type='datetime'),
+    Field('updated_at', type='datetime'),
+    migrate=MIGRATE
+)
+
+DB.define_table(
+    'types',
+    Field('id', type='id'),
+    Field('name', type='string', length=50),
+    Field('modelo', rname='class', type='string', length=50),
+    Field('prefijo', type='string', length=5, unique=True),
     Field('created_at', type='datetime'),
     Field('updated_at', type='datetime'),
     migrate=MIGRATE
