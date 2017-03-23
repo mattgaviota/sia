@@ -1,6 +1,8 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
+from flask_login import current_user
 from ..libs.dbutils import Handler
+from ..libs.revutils import Revisioner
 from ..forms import Establecimiento_form
 from ..modelos.establecimientos import Establecimientos
 
@@ -63,8 +65,13 @@ def restore():
     establecimientos = Establecimientos().get_establecimientos()
     form = Establecimiento_form()
     srv_origen = Establecimientos().get_establecimiento(form.id.data)
-    srv_destino = Establecimientos().get_establecimiento(srv_origen.id_establecimiento_destino)
+    srv_destino = Establecimientos().get_establecimiento(
+        srv_origen.id_establecimiento_destino
+    )
     result = Handler(srv_origen, srv_destino, form).restaurar_db()
+    Revisioner(user=current_user).save_revision(
+        'Restauró una Base de Datos de {}'.format(srv_origen.name)
+    )
     return render_template(
         'restaurar/output.html.jinja',
         form=form,

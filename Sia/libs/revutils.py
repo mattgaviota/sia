@@ -12,6 +12,23 @@ class Revisioner(object):
         self.user = user
         self.type = Types().get_type_by_prefix(type_prefijo)
 
-    def save_revision(self, comentario):
+    def save_revision(self, comentario=''):
         """ Guarda un registro de actividad. """
-        # TODO: Guardar revision según corresponda
+        data = {}
+        if self.comando:
+            data['id_comando'] = self.comando.id
+        if self.type:
+            data['id_type'] = self.type.id
+        data['id_user'] = self.user.user_id
+        data['comentario'] = comentario
+        Revisions().insert_revision(data)
+
+    def get_revisions_by_user(self, user):
+        """ Retorna la actividad de un usuario. """
+        # TODO: formatear revisiones
+        return Revisions().get_revisions_by_user(user)
+
+    def get_all_revisions(self):
+        """ Retorna todas las actividades. """
+        # TODO: formatear revisiones
+        return Revisions().get_revisions()

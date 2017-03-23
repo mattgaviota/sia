@@ -20,7 +20,7 @@ class Types(object):
         row = self.db(self.db.types.id == id).select().first()
         return row
 
-    def get_types_by_prefix(self, prefix):
+    def get_type_by_prefix(self, prefix):
         row = self.db(self.db.types.prefijo == prefix).select().first()
         return row
 

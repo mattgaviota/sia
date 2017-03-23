@@ -1,7 +1,6 @@
 # coding=utf-8
-from flask import Blueprint, render_template, request, flash
-from flask import redirect, url_for, current_app
-from flask_login import login_required
+from flask import Blueprint, render_template, flash, redirect, url_for
+from flask_login import login_required, current_user
 from ..forms import Establecimiento_form, Acceso_form
 from ..forms import Servidor_form, Comando_form
 from ..modelos.establecimientos import Establecimientos
@@ -9,6 +8,7 @@ from ..modelos.accesos import Accesos
 from ..modelos.servidores import Servidores
 from ..modelos.comandos import Comandos
 from ..libs import is_admin
+from ..libs.revutils import Revisioner
 
 
 admin = Blueprint(
@@ -74,6 +74,9 @@ def establecimientos_store():
     ]
     if form.validate_on_submit():
         if Establecimientos().insert_establecimiento(form):
+            Revisioner(user=current_user).save_revision(
+                'Creó el estableciemiento {}'.format(form.data['name'])
+            )
             flash('El establecimiento se creó correctamente.', 'success')
         else:
             flash('Hubo un error al guardar', 'error')
@@ -121,6 +124,9 @@ def establecimientos_update():
     ]
     if form.validate_on_submit():
         if Establecimientos().update_establecimiento(form):
+            Revisioner(user=current_user).save_revision(
+                'Actualizó el estableciemiento {}'.format(form.data['name'])
+            )
             flash('El establecimiento se actualizó correctamente.', 'success')
         else:
             flash('Hubo un error al actualizar el establecimiento', 'error')
@@ -134,7 +140,13 @@ def establecimientos_update():
 @is_admin
 def establecimientos_delete(id_establecimiento):
     """ Eliminar establecimiento. """
+    establecimiento = Establecimientos().get_establecimiento(
+        id_establecimiento
+    )
     if Establecimientos().delete(id_establecimiento):
+        Revisioner(user=current_user).save_revision(
+            'Eliminó el estableciemiento {}'.format(establecimiento.name)
+        )
         flash('El establecimiento se eliminó correctamente.', 'success')
     else:
         flash('Hubo un error al eliminar el establecimiento', 'error')
@@ -177,6 +189,9 @@ def accesos_store():
     form = Acceso_form()
     if form.validate_on_submit():
         if Accesos().insert_acceso(form):
+            Revisioner(user=current_user).save_revision(
+                'Creó el acceso {}'.format(form.data['name'])
+            )
             flash('El acceso se creó correctamente.', 'success')
         else:
             flash('Hubo un error al guardar', 'error')
@@ -212,6 +227,9 @@ def accesos_update():
     form = Acceso_form()
     if form.validate_on_submit():
         if Accesos().update_acceso(form):
+            Revisioner(user=current_user).save_revision(
+                'Actualizó el acceso {}'.format(form.data['name'])
+            )
             flash('El acceso se actualizó correctamente.', 'success')
         else:
             flash('Hubo un error al actualizar el acceso', 'error')
@@ -223,7 +241,11 @@ def accesos_update():
 @is_admin
 def accesos_delete(id_acceso):
     """Eliminar acceso."""
+    acceso = Accesos().get_acceso(id_acceso)
     if Accesos().delete(id_acceso):
+        Revisioner(user=current_user).save_revision(
+            'Eliminó el acceso {}'.format(acceso.name)
+        )
         flash('El acceso se eliminó correctamente.', 'success')
     else:
         flash('Hubo un error al eliminar el acceso', 'error')
@@ -272,6 +294,9 @@ def servidores_store():
     ]
     if form.validate_on_submit():
         if Servidores().insert_servidor(form):
+            Revisioner(user=current_user).save_revision(
+                'Creó el servidor {}'.format(form.data['name'])
+            )
             flash('El servidor se creó correctamente.', 'success')
         else:
             flash('Hubo un error al guardar', 'error')
@@ -313,6 +338,9 @@ def servidores_update():
     ]
     if form.validate_on_submit():
         if Servidores().update_servidor(form):
+            Revisioner(user=current_user).save_revision(
+                'Actualizó el servidor {}'.format(form.data['name'])
+            )
             flash('El servidor se actualizó correctamente.', 'success')
         else:
             flash('Hubo un error al actualizar el servidor', 'error')
@@ -324,7 +352,11 @@ def servidores_update():
 @is_admin
 def servidores_delete(id_servidor):
     """ Eliminar servidor. """
+    servidor = Servidores().get_servidor(id_servidor)
     if Servidores().delete(id_servidor):
+        Revisioner(user=current_user).save_revision(
+            'Eliminó el servidor {}'.format(servidor.name)
+        )
         flash('El servidor se eliminó correctamente.', 'success')
     else:
         flash('Hubo un error al eliminar el servidor', 'error')
@@ -367,6 +399,9 @@ def comandos_store():
     form = Comando_form()
     if form.validate_on_submit():
         if Comandos().insert_comando(form):
+            Revisioner(user=current_user).save_revision(
+                'Creó el comando {}'.format(form.data['title'])
+            )
             flash('El comando se creó correctamente.', 'success')
         else:
             flash('Hubo un error al guardar', 'error')
@@ -402,6 +437,9 @@ def comandos_update():
     form = Comando_form()
     if form.validate_on_submit():
         if Comandos().update_comando(form):
+            Revisioner(user=current_user).save_revision(
+                'Actualizó el acceso {}'.format(form.data['title'])
+            )
             flash('El comando se actualizó correctamente.', 'success')
         else:
             flash('Hubo un error al actualizar el comando', 'error')
@@ -413,7 +451,11 @@ def comandos_update():
 @is_admin
 def comandos_delete(id_comando):
     """Eliminar comando."""
+    comando = Comandos().get_comando(id_comando)
     if Comandos().delete(id_comando):
+        Revisioner(user=current_user).save_revision(
+            'Eliminó el comando {}'.format(comando.title)
+        )
         flash('El comando se eliminó correctamente.', 'success')
     else:
         flash('Hubo un error al eliminar el comando', 'error')

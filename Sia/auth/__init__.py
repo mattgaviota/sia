@@ -1,9 +1,10 @@
 # coding=utf-8
 from flask import Blueprint, render_template, url_for, flash
-from flask import request, redirect, abort, session, current_app
+from flask import request, redirect
 from flask_login import login_user, login_required, logout_user, current_user
 from ..forms import Login_form, User_form, Password_form
 from ..libs.utils import Utils
+from ..libs.revutils import Revisioner
 from ..libs import is_admin
 from ..modelos.users import Users
 
@@ -24,6 +25,7 @@ def login():
         if user:
             if user.is_correct_password(form.password.data):
                 login_user(user)
+                Revisioner(user=user).save_revision('Ingresó al sistema')
                 flash(
                     'Ha ingresado correctamente.',
                     'success'
@@ -46,8 +48,14 @@ def register():
     form = User_form()
     if form.validate_on_submit():
         Users().insert_user(form)
+        Revisioner(user=current_user).save_revision(
+            'Creó el usuario {} {}'.format(
+                form.data['name'],
+                form.data['last_name']
+            )
+        )
         flash('Registrado correctamente.', 'success')
-        return redirect(url_for('home.index'))
+        return redirect(url_for('admin.index'))
     return render_template('auth/register.html.jinja', form=form)
 
 
@@ -55,6 +63,7 @@ def register():
 @login_required
 def logout():
     """ Método que realiza el logout. """
+    Revisioner(user=current_user).save_revision('Salió del sistema')
     logout_user()
     flash('Has salido correctamente.', 'success')
     return redirect(url_for('home.index'))
@@ -68,6 +77,7 @@ def change_pass():
     if form.validate_on_submit():
         if current_user.update_password(form):
             flash('Registrado correctamente.', 'success')
+            Revisioner(user=current_user).save_revision('Cambió su contraseña')
             logout_user()
             return redirect(url_for('home.index'))
         flash('La contraseña actual no corresponde al usuario.', 'error')

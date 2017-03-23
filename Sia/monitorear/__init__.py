@@ -1,7 +1,8 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from ..libs.srvutils import Runner
+from ..libs.revutils import Revisioner
 from ..forms import Servidor_form
 from ..modelos.servidores import Servidores
 from ..modelos.comandos import Comandos
@@ -43,6 +44,9 @@ def ejecutar(id_servidor, id_comando):
     comandos = Comandos().get_comandos()
     comando = Comandos().get_comando(id_comando)
     result = Runner(comando, servidor).run()
+    Revisioner(user=current_user, comando=comando).save_revision(
+        'en el servidor {}'.format(servidor.name)
+    )
     return render_template(
         'monitorear/ejecutar.html.jinja',
         servidores=servidores,
