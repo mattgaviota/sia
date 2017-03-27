@@ -1,0 +1,34 @@
+{% extends "layout.html.jinja" %}
+{% block header %}
+    Historial
+{% endblock %}
+{% block large_content %}
+    <div class="row contenido">
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="{{ url_for('home.index') }}">
+                Volver
+            </a>
+        </div>
+    </div>
+    <div class="list-group">
+        {% for revision in revisiones %}
+            <li id="{{ revision['id'] }}"class="list-group-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="list-group-item-heading">
+                            <a href="{{ url_for('historial.user', user_id=revision.user_id) }}">
+                                <strong>{{ revision['usuario'] }}</strong>
+                            </a>
+                            {{ revision['mensaje'] }}
+                        </h5>
+                    </div>
+                    <div class="col-md-2 col-md-offset-6">
+                        <p class="list-group-item-text">
+                            {{ revision['fecha'] }}
+                        </p>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </div>
+{% endblock %}

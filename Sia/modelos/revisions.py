@@ -11,7 +11,7 @@ class Revisions(object):
 
     def get_revisions(self):
         rows = self.db(self.db.revisions.id > 0).select(
-            orderby=self.db.revisions.created_at,
+            orderby=~self.db.revisions.created_at,
             cacheable=True
         )
         return rows
@@ -22,7 +22,7 @@ class Revisions(object):
 
     def get_revisions_by_user(self, user):
         rows = self.db(self.db.revisions.id_user == user.user_id).select(
-            orderby=self.db.revisions.created_at
+            orderby=~self.db.revisions.created_at
         )
         return rows
 

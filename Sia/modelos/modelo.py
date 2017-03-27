@@ -59,11 +59,9 @@ DB.define_table(
     'revisions',
     Field('id', type='id'),
     Field('id_user', type='reference users'),
-    Field('id_type', type='reference types'),
     Field('id_comando', type='reference comandos'),
     Field('comentario', type='string', length=150),
     Field('created_at', type='datetime'),
-    Field('updated_at', type='datetime'),
     migrate=MIGRATE
 )
 
