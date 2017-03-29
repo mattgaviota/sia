@@ -11,3 +11,12 @@ def is_admin(func):
             return redirect(url_for('home.index'))
         return func(*args, **kwargs)
     return decorated_view
+
+def is_not_consulta(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if current_user.consulta:
+            flash('Su rol no le permite acceder a este módulo', 'error')
+            return redirect(url_for('home.index'))
+        return func(*args, **kwargs)
+    return decorated_view

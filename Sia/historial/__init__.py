@@ -1,6 +1,7 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
 from flask_login import login_required
+from ..libs import is_admin
 from ..libs.revutils import Revisioner
 
 
@@ -13,6 +14,7 @@ historial = Blueprint(
 
 @historial.route('/')
 @login_required
+@is_admin
 def index():
     """index all revisions"""
     revisiones = Revisioner().get_all_revisions()
@@ -20,6 +22,7 @@ def index():
 
 @historial.route('/user/<user_id>')
 @login_required
+@is_admin
 def user(user_id):
     """user revisions"""
     revisiones = Revisioner().get_revisions_by_user(user_id)

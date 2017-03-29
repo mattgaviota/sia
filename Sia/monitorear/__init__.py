@@ -1,6 +1,7 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
+from ..libs import is_not_consulta
 from ..libs.srvutils import Runner
 from ..libs.revutils import Revisioner
 from ..forms import Servidor_form
@@ -17,6 +18,7 @@ monitorear = Blueprint(
 
 @monitorear.route('/')
 @login_required
+@is_not_consulta
 def index():
     """index"""
     servidores = Servidores().get_servidores()
@@ -25,6 +27,7 @@ def index():
 
 @monitorear.route('/chequear/<id_servidor>')
 @login_required
+@is_not_consulta
 def check(id_servidor):
     """Muestra los datos del hospital"""
     servidores = Servidores().get_servidores()
@@ -39,6 +42,7 @@ def check(id_servidor):
 
 @monitorear.route('/ejecutar/<id_servidor>/<id_comando>')
 @login_required
+@is_not_consulta
 def ejecutar(id_servidor, id_comando):
     """ejecutar comando"""
     servidores = Servidores().get_servidores()
