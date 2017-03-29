@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
-from flask_login import current_user
+from flask_login import current_user, login_required
 from ..libs.dbutils import Handler
 from ..libs.revutils import Revisioner
 from ..forms import Establecimiento_form
@@ -15,6 +15,7 @@ restaurar = Blueprint(
 
 
 @restaurar.route('/')
+@login_required
 def index():
     """index"""
     establecimientos = Establecimientos().get_establecimientos()
@@ -22,6 +23,7 @@ def index():
 
 
 @restaurar.route('/chequear/<id_establecimiento>')
+@login_required
 def check(id_establecimiento):
     """Muestra los datos del hospital"""
     establecimientos = Establecimientos().get_establecimientos()
@@ -37,6 +39,7 @@ def check(id_establecimiento):
 
 
 @restaurar.route('/validar', methods=['POST'])
+@login_required
 def validate():
     """Llama al script que valida la restauración. """
     establecimientos = Establecimientos().get_establecimientos()
@@ -60,6 +63,7 @@ def validate():
 
 
 @restaurar.route('/restaurar', methods=['POST'])
+@login_required
 def restore():
     """Llama al script que realiza la restauración. """
     establecimientos = Establecimientos().get_establecimientos()

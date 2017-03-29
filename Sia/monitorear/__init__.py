@@ -16,6 +16,7 @@ monitorear = Blueprint(
 
 
 @monitorear.route('/')
+@login_required
 def index():
     """index"""
     servidores = Servidores().get_servidores()
@@ -23,6 +24,7 @@ def index():
 
 
 @monitorear.route('/chequear/<id_servidor>')
+@login_required
 def check(id_servidor):
     """Muestra los datos del hospital"""
     servidores = Servidores().get_servidores()

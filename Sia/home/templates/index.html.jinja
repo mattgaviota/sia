@@ -4,17 +4,25 @@
 {% endblock %}
 {% block menu %}
 <div class="list-group">
-    <a href="{{ url_for('restaurar.index') }}" class="list-group-item">
+    {% if not current_user.consulta %}
+        <a href="{{ url_for('restaurar.index') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            Restaurar Bases de Datos
+        </a>
+        <a href="{{ url_for('monitorear.index') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            Monitorear Servidores Remotos
+        </a>
+    {% endif %}
+    {% if current_user.admin %}
+        <a href="{{ url_for('historial.index') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            Mostrar el Historial de Actividades
+        </a>
+    {% endif %}
+    <a href="#" class="list-group-item">
         <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-        Restaurar Bases de Datos
-    </a>
-    <a href="{{ url_for('monitorear.index') }}" class="list-group-item">
-        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-        Monitorear Servidores Remotos
-    </a>
-    <a href="{{ url_for('historial.index') }}" class="list-group-item">
-        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-        Mostrar el Historial de Actividades
+        Versiones del sistema
     </a>
 </div>
 {% endblock %}

@@ -88,6 +88,7 @@ class User_form(FlaskForm):
         validators=[DataRequired(message="Este campo es requerido")]
     )
     is_admin = BooleanField('Es administrador')
+    is_client = BooleanField('Es usuario de consulta')
 
 
 class Password_form(FlaskForm):

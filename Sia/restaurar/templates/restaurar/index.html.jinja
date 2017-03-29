@@ -3,17 +3,20 @@
     Bases de Datos para restaurar
 {% endblock %}
 {% block menu %}
-<div class="list-group">
-    {% for establecimiento in establecimientos %}
-    <a href="{{ url_for('restaurar.check', id_establecimiento=establecimiento.id) }}" class="list-group-item">
-        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-        {{ establecimiento.name }}
-    </a>
-    {% endfor %}
-    <a href="{{ url_for('home.index') }}" class="list-group-item">
-        <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span>
-        Volver
-    </a>
-</div>
+    <div class="row contenido">
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="{{ url_for('home.index') }}">
+                Volver
+            </a>
+        </div>
+    </div>
+    <div class="list-group">
+        {% for establecimiento in establecimientos %}
+        <a href="{{ url_for('restaurar.check', id_establecimiento=establecimiento.id) }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            {{ establecimiento.name }}
+        </a>
+        {% endfor %}
+    </div>
 {% endblock %}
 {% block content %}Elige un establecimiento para comenzar{% endblock %}

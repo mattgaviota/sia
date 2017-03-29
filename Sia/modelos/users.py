@@ -26,6 +26,14 @@ class Users(object):
     def is_anonymous(self):
         return False
 
+    @property
+    def admin(self):
+        return self.is_admin
+
+    @property
+    def consulta(self):
+        return self.is_client
+
     def get_id(self):
         return str(self.user_id)
 
@@ -53,6 +61,7 @@ class Users(object):
             self.name = row.name + ' ' + row.last_name
             self.password = row.password
             self.is_admin = row.is_admin
+            self.is_client = row.is_client
             return self
         else:
             return None

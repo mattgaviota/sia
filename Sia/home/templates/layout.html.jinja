@@ -29,10 +29,12 @@
             <nav class="navbar navbar-inverse">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a href="{{ url_for('admin.index') }}" class="navbar-brand">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                            Configuración
-                        </a>
+                        {% if current_user.admin %}
+                            <a href="{{ url_for('admin.index') }}" class="navbar-brand">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                Configuración
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
@@ -94,7 +96,7 @@
                 <div class="col-md-4">
                     <h4>Datos del sistema</h4>
                     <p class="small">
-                        Versión: 1.8.0 &copy; 2017<br>
+                        Versión: 2.0.0 &copy; 2017<br>
                         <a href="http://www.digio.com.ar" target="_blank">Desarrollo por: Digio S.R.L</a><br>
                         Resolución: optimizado para 1024x768 o superior.<br>
                         <a href="http://getbootstrap.com/getting-started/#support-browsers" target="_blank">Navegadores soportados</a>

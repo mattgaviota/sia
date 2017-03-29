@@ -94,9 +94,10 @@ DB.define_table(
     Field('id', type='id'),
     Field('name', type='string', length=40),
     Field('last_name', type='string', length=40),
-    Field('login', type='string', length=40),
+    Field('login', type='string', length=40, unique=True),
     Field('password', type='string', length=128),
     Field('is_admin', type='boolean', default=False),
+    Field('is_client', type='boolean', default=False),
     Field('created_at', type='datetime'),
     Field('updated_at', type='datetime'),
     migrate=MIGRATE

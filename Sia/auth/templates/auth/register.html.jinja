@@ -22,9 +22,9 @@
             {% endif %}
             {% if field.type == "BooleanField" %}
                 <div class="checkbox">
-                    <label for="is_admin">
+                    <label for="{{ field.name }}">
                         {{ field }}
-                        <strong>Es administrador?</strong>
+                        <strong>{{ field.label.text }}</strong>
                     </label>
                 </div>
             {% endif %}
