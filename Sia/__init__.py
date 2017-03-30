@@ -10,6 +10,7 @@ from .auth import auth
 from .monitorear import monitorear
 from .historial import historial
 from .restaurar import restaurar
+from .versiones import versiones
 from .modelos.users import Users
 
 login_manager = LoginManager()
@@ -25,6 +26,7 @@ def create_app(config_name):
     app.register_blueprint(restaurar, url_prefix='/restaurar')
     app.register_blueprint(monitorear, url_prefix='/monitorear')
     app.register_blueprint(historial, url_prefix='/historial')
+    app.register_blueprint(versiones, url_prefix='/versiones')
     app.register_blueprint(admin, url_prefix='/admin')
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Necesitas loguearte para acceder'

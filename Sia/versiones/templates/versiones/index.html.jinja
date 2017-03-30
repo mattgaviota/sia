@@ -1,0 +1,29 @@
+{% extends "layout.html.jinja" %}
+{% block header %}
+    Versiones
+{% endblock %}
+{% block menu %}
+    <div class="row contenido">
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="{{ url_for('home.index') }}">
+                Volver
+            </a>
+        </div>
+    </div>
+    <div class="list-group">
+        {% for folder in folders %}
+        <a href="{{ url_for('versiones.files', folder_id=folder.id) }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            {{ folder.name }}
+        </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block content %}
+    {% if current_user.admin %}
+        <a href="{{ url_for('versiones.upload') }}" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            Nueva Versión
+        </a>
+    {% endif %}
+{% endblock %}%}
