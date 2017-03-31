@@ -19,7 +19,6 @@ auth = Blueprint(
 def login():
     next = request.args.get('next')
     form = Login_form()
-    password = Users().generate_password('albatr05')
     if form.validate_on_submit():
         user = Users().get_user(username=form.username.data)
         if user:
@@ -37,7 +36,7 @@ def login():
             flash('usuario y/o password incorrecto', 'error')
         else:
             flash('usuario y/o password incorrecto', 'error')
-    return render_template('auth/login.html.jinja', form=form, next=next, password=password)
+    return render_template('auth/login.html.jinja', form=form, next=next)
 
 
 @auth.route('/register', methods=['GET', 'POST'])

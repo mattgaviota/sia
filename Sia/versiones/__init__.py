@@ -1,8 +1,10 @@
 # coding=utf-8
 from flask import Blueprint, render_template, request
-from flask_login import login_required
+from flask_login import login_required, current_user
+from ..forms import Upload_form
 from ..libs import is_admin
 from ..libs.fileutils import Filemanager
+from ..libs.revutils import Revisioner
 
 
 versiones = Blueprint(
@@ -26,8 +28,20 @@ def files(folder_id):
     files = Filemanager().get_files_from_folder(folder_id)
     return render_template('versiones/list.html.jinja', files=files)
 
-@versiones.route('/upload')
+@versiones.route('/upload', methods=['GET', 'POST'])
 @login_required
-def upload(folder_id):
+def upload():
     """index all versions"""
-    return render_template('versiones/list.html.jinja', files=files)
+    form = Upload_form()
+    form.version.choices = [
+        (ver['versionsistemaid'], ver['versionsistemadesc'])
+        for ver in Filemanager().get_versiones_disponibles()
+    ]
+    if form.validate_on_submit():
+        Filemanager().upload_files(form)
+        Revisioner(user=current_user).save_revision(
+            'Subió una nueva versión del sistema'
+        )
+        flash('Ha ingresado correctamente.', 'success')
+        return redirect(url_for('home.index'))
+    return render_template('versiones/upload.html.jinja', form=form)

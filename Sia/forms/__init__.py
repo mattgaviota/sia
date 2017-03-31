@@ -1,8 +1,10 @@
 # coding=utf-8
+
+import re
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, HiddenField
-from wtforms import SelectField, PasswordField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms import SelectField, PasswordField, FileField
+from wtforms.validators import DataRequired, EqualTo, Regexp, ValidationError
 
 
 class Establecimiento_form(FlaskForm):
@@ -134,8 +136,8 @@ class Servidor_form(FlaskForm):
 class Comando_form(FlaskForm):
     id = HiddenField('id')
     title = StringField(
-    'Título del comando',
-    validators=[DataRequired(message="Este campo es requerido")]
+        'Título del comando',
+        validators=[DataRequired(message="Este campo es requerido")]
     )
     name = StringField(
         'Nombre del comando',
@@ -146,3 +148,36 @@ class Comando_form(FlaskForm):
         validators=[DataRequired(message="Este campo es requerido")]
     )
     need_sudo = BooleanField('Necesita sudo?')
+
+
+def extension(prefijo):
+    message = "El archivo debe ser del tipo {}".format(prefijo)
+
+    def _extension(form, field):
+        if field.data:
+            if not re.match(r'^\w+\.{}$'.format(prefijo), field.name):
+                raise ValidationError(message)
+
+
+class Upload_form(FlaskForm):
+    version = SelectField(
+        'Versión que se va a subir',
+        coerce=int,
+        description='Elija una versión'
+    )
+    version_name = StringField(
+        'Nombre de la versión',
+        validators=[DataRequired(message="Este campo es requerido")]
+    )
+    fileapp = FileField(
+        'Aplicación',
+        validators=[DataRequired(message="Este campo es requerido"), extension('tgz')]
+    )
+    filecompletesql = FileField(
+        'Esquema completo de la base',
+        validators=[DataRequired(message="Este campo es requerido"), extension('sql')]
+    )
+    fileupdatesql = FileField(
+        'Script actualización de la base',
+        validators=[DataRequired(message="Este campo es requerido"), extension('sql')]
+    )
