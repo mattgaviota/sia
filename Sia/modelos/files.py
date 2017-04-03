@@ -8,13 +8,6 @@ class Files(object):
 
     def __init__(self):
         self.db = DB
-        self.guarded = ['id', 'csrf_token']
-
-    def clean_data(self, data):
-        data = data.data
-        for field in self.guarded:
-            data.pop(field)
-        return data
 
     def get_files(self):
         rows = self.db(self.db.files.id > 0).select(
@@ -35,7 +28,6 @@ class Files(object):
         return row
 
     def insert_file(self, data):
-        data = self.clean_data(data)
         data['created_at'] = datetime.now()
         id_file = None
         try:

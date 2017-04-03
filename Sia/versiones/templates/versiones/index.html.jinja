@@ -21,7 +21,9 @@
 {% endblock %}
 {% block content %}
     {% if current_user.admin %}
-        <a href="{{ url_for('versiones.upload') }}" class="btn btn-success">
+        {% include 'form_errors.html.jinja' %}
+        {% include 'messages.html.jinja' %}
+        <a href="{{ url_for('versiones.upload_folder') }}" class="btn btn-success">
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
             Nueva Versión
         </a>

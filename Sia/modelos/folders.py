@@ -8,13 +8,6 @@ class Folders(object):
 
     def __init__(self):
         self.db = DB
-        self.guarded = ['id', 'csrf_token']
-
-    def clean_data(self, data):
-        data = data.data
-        for field in self.guarded:
-            data.pop(field)
-        return data
 
     def get_folders(self):
         rows = self.db(self.db.folders.id > 0).select(
@@ -28,7 +21,6 @@ class Folders(object):
         return row
 
     def insert_folder(self, data):
-        data = self.clean_data(data)
         data['created_at'] = datetime.now()
         id_folder = None
         try:
