@@ -24,11 +24,16 @@ class Folders(object):
         data['created_at'] = datetime.now()
         id_folder = None
         try:
+            self.update_folders()
             id_folder = self.db.folders.insert(**data)
             self.db.commit()
         except IntegrityError:
             self.db.rollback()
         return id_folder
+
+    def update_folders(self):
+        self.db(self.db.folders.id > 0).update(**{'latest': 'f'})
+        self.db.commit()
 
     def delete(self, id):
         result = 0

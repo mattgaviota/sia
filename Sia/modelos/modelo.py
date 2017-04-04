@@ -60,7 +60,7 @@ DB.define_table(
     Field('id', type='id'),
     Field('name', type='string', length=50, unique=True),
     Field('path', type='string', length=150),
-    Field('versionsistemaid', type='integer'),
+    Field('latest', type='boolean', default=True),
     Field('created_at', type='datetime'),
     migrate=MIGRATE
 )

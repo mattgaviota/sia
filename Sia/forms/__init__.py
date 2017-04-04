@@ -151,11 +151,6 @@ class Comando_form(FlaskForm):
 
 
 class Upload_form(FlaskForm):
-    version = SelectField(
-        'Versión que se va a subir',
-        coerce=int,
-        description='Elija una versión'
-    )
     version_name = StringField(
         'Nombre de la versión',
         validators=[DataRequired(message="Este campo es requerido")]

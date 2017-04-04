@@ -6,7 +6,7 @@
     <form action="{{ url_for('versiones.upload_folder') }}" method="post" enctype=multipart/form-data>
         {{ form.hidden_tag() }}
         {% for field in form %}
-            {% if field.type in ['StringField', 'SelectField'] %}
+            {% if field.type == 'StringField' %}
             {% if field.errors %}
                 <div class="form-group has-error">
             {% else %}

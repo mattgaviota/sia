@@ -6,10 +6,9 @@ from flask import current_app, jsonify
 from werkzeug.utils import secure_filename
 from ..modelos.folders import Folders
 from ..modelos.files import Files
-from ..modelos.versiones import Versiones
 
 
-ALLOWED_EXTENSIONS = set(['sql', 'tgz', 'gz', 'tar'])
+ALLOWED_EXTENSIONS = set(['sql', 'tgz', 'gz', 'tar', 'pdf'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -35,28 +34,13 @@ class Filemanager(object):
     def get_folder(self, folder_id):
         """ Retorna el nombre de la carpeta """
         folder = Folders().get_folder(folder_id)
-        version = Versiones().get_version(folder.versionsistemaid)
-        return '{}({})'.format(version.versionsistemadesc, folder.name)
-
-    def get_versiones_disponibles(self):
-        versiones = []
-        folders = self.get_all_folders()
-        if folders:
-            versiones_subidas = []
-            for folder in folders:
-                versiones_subidas.append(folder.versionsistemaid)
-                versiones = Versiones().get_versiones(versiones_subidas)
-        else:
-            versiones = Versiones().get_versiones()
-        return versiones
+        return folder.name
 
     def create_version(self, form):
         """ Crea una carpeta con el numero de versión y
             carga la nueva versión. """
         data = form.data
-        reg_folder = {}
-        reg_folder['name'] = data['version_name']
-        reg_folder['versionsistemaid'] = data['version']
+        reg_folder = {'name': data['version_name']}
         new_path = self.make_folder(reg_folder)
         if new_path:
             reg_folder['path'] = new_path
@@ -65,12 +49,7 @@ class Filemanager(object):
         return 0
 
     def make_folder(self, reg_folder):
-        newpath = os.path.join(self.upload_path, '{}({})'.format(
-            Versiones().get_version(
-                reg_folder['versionsistemaid']
-            ).versionsistemadesc,
-            reg_folder['name']
-        ))
+        newpath = os.path.join(self.upload_path, reg_folder['name'])
         try:
             os.mkdir(newpath)
             return newpath
@@ -92,3 +71,19 @@ class Filemanager(object):
         reg_file['filesize'] = os.stat(file_path).st_size
         Files().insert_file(reg_file)
         return jsonify(files=files)
+
+    def delete_folder(self, folder_id):
+        folder = Folders().get_folder(folder_id)
+        Folders().delete(folder_id)
+        try:
+            os.rmdir(folder.path)
+        except OSError:
+            pass
+
+    def delete_file(self, file):
+        path = Folders().get_folder(file.id_folder).path
+        Files().delete(file.id)
+        try:
+            os.remove(os.path.join(path, file.filename))
+        except OSError:
+            pass

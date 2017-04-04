@@ -6,7 +6,7 @@ from pydal import DAL, Field
 USUARIO = 'postgres'
 PASSW = 'Digio123'
 SERVIDOR = '192.168.0.110'
-BASE = 'release'
+BASE = 'desarrollo'
 
 DB = DAL(
     "postgres://{0}:{1}@{2}/{3}".format(USUARIO, PASSW, SERVIDOR, BASE),

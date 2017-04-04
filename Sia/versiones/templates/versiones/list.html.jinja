@@ -4,9 +4,16 @@
     <h2>Version: {{ folder }}</h2>
 {% endblock %}
 {% block menu %}
-    {{ super() }}
+    <div class="row contenido">
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="{{ url_for('versiones.index') }}">
+                Volver
+            </a>
+        </div>
+    </div>
     {% include 'form_errors.html.jinja' %}
     {% include 'messages.html.jinja' %}
+    <h3>Archivos</h3>
     <div class="list-group">
         {% for file in files %}
         <a href="#" class="list-group-item">
@@ -20,11 +27,48 @@
     {% if current_user.admin %}
         {% include 'form_errors.html.jinja' %}
         {% include 'messages.html.jinja' %}
-        <a href="{{ url_for('versiones.upload_file', folder_id=folder_id) }}" class="btn btn-success">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-            Nuevo archivo
-        </a>
+        <div>
+            <span class="btn btn-success fileinput-button" id="button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>Nuevo archivo</span>
+                <input id="fileupload"
+                    type="file"
+                    name="file"
+                    data-url="{{ url_for('versiones.upload_file', folder_id=folder_id) }}">
+            </span><br>
+            <div class="progress">
+                <div
+                    class="progress-bar progress-bar-success progress-bar-striped"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#fileupload').fileupload({
+                    dataType: 'json',
+                    done: function (e, data) {
+                        location.reload(true);
+                    },
+                    progressall: function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        $('.progress-bar').css(
+                            'width',
+                            progress + '%'
+                        );
+                    }
+                });
+            });
+        </script>
     {% endif %}
 {% endblock %}
 {% block result %}
+    {% if current_user.admin %}
+        <a class="btn btn-danger" href="{{ url_for('versiones.delete_folder', folder_id=folder_id) }}">
+            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+            Eliminar versión
+        </a>
+    {% endif %}
 {% endblock %}

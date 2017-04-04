@@ -40,10 +40,6 @@ def files(folder_id):
 def upload_folder():
     """ Upload versions(folders). """
     form = Upload_form()
-    form.version.choices = [
-        (ver['versionsistemaid'], ver['versionsistemadesc'])
-        for ver in Filemanager().get_versiones_disponibles()
-    ]
     if form.validate_on_submit():
         if Filemanager().create_version(form):
             Revisioner(user=current_user).save_revision(
@@ -72,3 +68,15 @@ def upload_file(folder_id):
         folder=Filemanager().get_folder(folder_id),
         folder_id=folder_id
     )
+
+@versiones.route('/deletefolder/<folder_id>', methods=['GET'])
+@login_required
+@is_admin
+def delete_folder(folder_id):
+    """ delete folder and all it's files. """
+    files = Filemanager().get_files_from_folder(folder_id)
+    for file in files:
+        Filemanager().delete_file(file)
+    Filemanager().delete_folder(folder_id)
+    flash('Versión eliminada juntos con sus archivos.', 'success')
+    return redirect(url_for('versiones.index'))
