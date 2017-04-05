@@ -14,7 +14,10 @@
         {% for folder in folders %}
         <a href="{{ url_for('versiones.files', folder_id=folder.id) }}" class="list-group-item">
             <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-            {{ folder.name }}
+            {{ folder.name }} ({{ folder.created_at.strftime('%d/%m/%Y') }})
+            {% if folder.latest %}
+                <span class="label label-success">Última</span>
+            {% endif %}
         </a>
         {% endfor %}
     </div>

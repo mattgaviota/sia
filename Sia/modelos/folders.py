@@ -11,7 +11,7 @@ class Folders(object):
 
     def get_folders(self):
         rows = self.db(self.db.folders.id > 0).select(
-            orderby=self.db.folders.name,
+            orderby=~self.db.folders.created_at,
             cacheable=True
         )
         return rows
@@ -30,6 +30,10 @@ class Folders(object):
         except IntegrityError:
             self.db.rollback()
         return id_folder
+
+    def update_folder(self, folder_id):
+        self.db(self.db.folders.id == folder_id).update(**{'latest': 't'})
+        self.db.commit()
 
     def update_folders(self):
         self.db(self.db.folders.id > 0).update(**{'latest': 'f'})

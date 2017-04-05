@@ -2,7 +2,7 @@
 
 from datetime import datetime
 import os
-from flask import current_app, jsonify
+from flask import current_app, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from ..modelos.folders import Folders
 from ..modelos.files import Files
@@ -31,10 +31,22 @@ class Filemanager(object):
         files = Files().get_files_by_folder(folder_id)
         return files
 
+    def get_file_from_directory(self, file_id):
+        """ Retorna todos los archivos de una carpeta. """
+        file = self.get_file(file_id)
+        folder = self.get_folder(file.id_folder)
+        path = os.path.join(current_app.root_path, '../' + folder.path + '/')
+        return send_from_directory(path, file.filename, as_attachment=True)
+
+    def get_file(self, file_id):
+        """ Retorna el archivo """
+        file = Files().get_file(file_id)
+        return file
+
     def get_folder(self, folder_id):
         """ Retorna el nombre de la carpeta """
         folder = Folders().get_folder(folder_id)
-        return folder.name
+        return folder
 
     def create_version(self, form):
         """ Crea una carpeta con el numero de versión y
@@ -56,7 +68,7 @@ class Filemanager(object):
         except FileExistsError:
             return 0
 
-    def upload_files(self, file, folder_id):
+    def upload_files(self, file, name, folder_id):
         files = []
         reg_file = {}
         filename = secure_filename(file.filename)
@@ -65,7 +77,7 @@ class Filemanager(object):
         file.save(file_path)
         f = {'name': filename}
         files.append(f)
-        reg_file['name'] = filename
+        reg_file['name'] = name
         reg_file['filename'] = filename
         reg_file['id_folder'] = folder_id
         reg_file['filesize'] = os.stat(file_path).st_size
@@ -87,3 +99,7 @@ class Filemanager(object):
             os.remove(os.path.join(path, file.filename))
         except OSError:
             pass
+
+    def set_latest_version(self, folder_id):
+        Folders().update_folders()
+        Folders().update_folder(folder_id)
