@@ -49,6 +49,10 @@ class Filemanager(object):
         folder = Folders().get_last_folder(folder_id)
         return folder
 
+    def get_folder_by_name(self, name):
+        folder = Folders().get_folder_by_name(name)
+        return folder
+
     def create_version(self, form):
         """ Makes a version and the folder asociated. """
         data = form.data

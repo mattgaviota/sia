@@ -6,6 +6,7 @@ from flask_login import LoginManager
 from config import config
 from .home import home
 from .admin import admin
+from .api import api
 from .auth import auth
 from .monitorear import monitorear
 from .historial import historial
@@ -28,6 +29,7 @@ def create_app(config_name):
     app.register_blueprint(historial, url_prefix='/historial')
     app.register_blueprint(versiones, url_prefix='/versiones')
     app.register_blueprint(admin, url_prefix='/admin')
+    app.register_blueprint(api, url_prefix='/api/v1')
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Necesitas loguearte para acceder'
     return app

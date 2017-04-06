@@ -30,6 +30,10 @@ class Folders(object):
         row = self.db(self.db.folders.id == id).select().first()
         return row
 
+    def get_folder_by_name(self, name):
+        row = self.db(self.db.folders.name == name).select().first()
+        return row
+
     def insert_folder(self, data):
         data['created_at'] = datetime.now()
         id_folder = None
