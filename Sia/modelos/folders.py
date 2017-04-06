@@ -16,6 +16,16 @@ class Folders(object):
         )
         return rows
 
+    def get_last_folder(self, folder_id=None):
+        if folder_id:
+            rows = self.db(self.db.folders.id != folder_id).select(
+                orderby=~self.db.folders.created_at,
+                cacheable=True
+            )
+        else:
+            rows = self.get_folders()
+        return rows[0]
+
     def get_folder(self, id):
         row = self.db(self.db.folders.id == id).select().first()
         return row

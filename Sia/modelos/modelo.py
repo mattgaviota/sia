@@ -68,7 +68,7 @@ DB.define_table(
 DB.define_table(
     'files',
     Field('id', type='id'),
-    Field('name', type='string', length=50, unique=True),
+    Field('name', type='string', length=100, unique=True),
     Field('filename', type='string', length=100, unique=True),
     Field('filesize', type='integer'),
     Field('id_folder', type='reference folders'),

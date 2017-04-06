@@ -3,7 +3,7 @@
 {% block menu %}
     <div class="row contenido">
         <div class="col-md-2">
-            <a class="btn btn-primary" href="{{ url_for('versiones.index') }}">
+            <a class="btn btn-primary" href="{{ url_for('versiones.files', folder_id=folder.id) }}">
                 Volver
             </a>
         </div>

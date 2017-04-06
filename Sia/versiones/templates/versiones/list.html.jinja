@@ -1,7 +1,12 @@
 {% extends "versiones/index.html.jinja" %}
 {% block header %}
     {{ super() }}
-    <h2>Version: {{ folder.name }}</h2>
+    <h2>
+        Version: {{ folder.name }}
+        {% if folder.latest %}
+            <span class="label label-success">Última</span>
+        {% endif %}
+    </h2>
 {% endblock %}
 {% block menu %}
     <div class="row contenido">
@@ -40,7 +45,7 @@
                 </span><br>
                 <div class="progress">
                     <div
-                        class="progress-bar progress-bar-success progress-bar-striped"
+                        class="progress-bar progress-bar-info progress-bar-striped"
                         role="progressbar"
                         aria-valuemin="0"
                         aria-valuemax="100">
@@ -75,10 +80,12 @@
 {% endblock %}
 {% block result %}
     {% if current_user.admin %}
-        <a class="btn btn-success" href="{{ url_for('versiones.set_latest', folder_id=folder_id) }}">
-            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-            Última versión
-        </a>
+        {% if not folder.latest %}
+            <a class="btn btn-success" href="{{ url_for('versiones.set_latest', folder_id=folder_id) }}">
+                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                Última versión
+            </a>
+        {% endif %}
         <a class="btn btn-danger" href="{{ url_for('versiones.delete_folder', folder_id=folder_id) }}">
             <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
             Eliminar versión

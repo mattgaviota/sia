@@ -16,41 +16,41 @@ def allowed_file(filename):
 
 
 class Filemanager(object):
-    """docstring for Handler."""
+    """docstring for Filemanager."""
     def __init__(self):
         super(Filemanager, self).__init__()
         self.upload_path = current_app.config['UPLOAD_PATH']
 
     def get_all_folders(self):
-        """ Retorna todas las carpetas. """
         folders = Folders().get_folders()
         return folders
 
     def get_files_from_folder(self, folder_id):
-        """ Retorna todos los archivos de una carpeta. """
         files = Files().get_files_by_folder(folder_id)
         return files
 
     def get_file_from_directory(self, file_id):
-        """ Retorna todos los archivos de una carpeta. """
         file = self.get_file(file_id)
         folder = self.get_folder(file.id_folder)
         path = os.path.join(current_app.root_path, '../' + folder.path + '/')
         return send_from_directory(path, file.filename, as_attachment=True)
 
     def get_file(self, file_id):
-        """ Retorna el archivo """
         file = Files().get_file(file_id)
         return file
 
     def get_folder(self, folder_id):
-        """ Retorna el nombre de la carpeta """
         folder = Folders().get_folder(folder_id)
         return folder
 
+    def get_last_folder(self, folder_id=None):
+        """ Get the last folder. If folder_id is seted, get the last folder
+        excluding the one with folder_id. """
+        folder = Folders().get_last_folder(folder_id)
+        return folder
+
     def create_version(self, form):
-        """ Crea una carpeta con el numero de versión y
-            carga la nueva versión. """
+        """ Makes a version and the folder asociated. """
         data = form.data
         reg_folder = {'name': data['version_name']}
         new_path = self.make_folder(reg_folder)
@@ -68,7 +68,7 @@ class Filemanager(object):
         except FileExistsError:
             return 0
 
-    def upload_files(self, file, name, folder_id):
+    def upload_file(self, file, name, folder_id):
         files = []
         reg_file = {}
         filename = secure_filename(file.filename)
@@ -86,6 +86,7 @@ class Filemanager(object):
 
     def delete_folder(self, folder_id):
         folder = Folders().get_folder(folder_id)
+        self.check_version(folder)
         Folders().delete(folder_id)
         try:
             os.rmdir(folder.path)
@@ -99,6 +100,13 @@ class Filemanager(object):
             os.remove(os.path.join(path, file.filename))
         except OSError:
             pass
+
+    def check_version(self, folder):
+        """ If the folder is the latest, set the next latest. """
+        if folder.latest:
+            last_folder = self.get_last_folder(folder.id)
+            self.set_latest_version(last_folder.id)
+        return 0
 
     def set_latest_version(self, folder_id):
         Folders().update_folders()

@@ -89,12 +89,15 @@ def upload_file(folder_id):
     if request.method == 'POST':
         files = []
         filename = request.form['name']
-        if not filename:
-            files.append({'name': 'none', 'error': 'Debe ingresar un nombre.'})
+        if not filename and len(filename) <= 100:
+            files.append({
+                'name': 'none',
+                'error': 'Debe ingresar un nombre menor a 100 caracteres.'
+            })
             return jsonify(files=files)
         file = request.files['file']
         if file and allowed_file(file.filename):
-            return Filemanager().upload_files(file, filename, folder_id)
+            return Filemanager().upload_file(file, filename, folder_id)
         files.append({
             'name': 'none',
             'error': 'El archivo no corresponde con los formatos aceptados'
