@@ -24,7 +24,10 @@ class Folders(object):
             )
         else:
             rows = self.get_folders()
-        return rows[0]
+        try:
+            return rows[0]
+        except IndexError:
+            return None
 
     def get_folder(self, id):
         row = self.db(self.db.folders.id == id).select().first()

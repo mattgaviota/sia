@@ -109,7 +109,8 @@ class Filemanager(object):
         """ If the folder is the latest, set the next latest. """
         if folder.latest:
             last_folder = self.get_last_folder(folder.id)
-            self.set_latest_version(last_folder.id)
+            if last_folder:
+                self.set_latest_version(last_folder.id)
         return 0
 
     def set_latest_version(self, folder_id):
