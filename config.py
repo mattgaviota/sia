@@ -2,7 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    VERSION = '2.0.2'
+    VERSION = '4.0.3'
     UPLOAD_PATH = 'uploads/'
 
 class Development(Config):
