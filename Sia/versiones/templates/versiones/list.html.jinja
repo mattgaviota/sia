@@ -35,33 +35,53 @@
             action="{{ url_for('versiones.upload_file', folder_id=folder_id) }}"
             method="post"
             enctype="multipart/form-data">
-            <div>
-                <label for="name">Nombre del archivo a subir</label>
-                <input type="text" name="name" value="">
-                <span class="btn btn-info fileinput-button" id="button">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    <span>Nuevo archivo</span>
-                    <input id="fileupload" type="file" name="file">
-                </span><br>
-                <div class="progress">
-                    <div
-                        class="progress-bar progress-bar-info progress-bar-striped"
-                        role="progressbar"
-                        aria-valuemin="0"
-                        aria-valuemax="100">
+                <input
+                    class="form-control"
+                    type="text"
+                    name="name"
+                    id="name"
+                    value=""
+                    placeholder="Nombre del archivo">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="btn btn-info fileinput-button" id="button" style="margin-top: 10px;">
+                            <i class="glyphicon glyphicon-folder-open"></i>
+                            &nbsp;Seleccionar archivo
+                            <input id="fileupload" type="file" name="file">
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress" style="margin-top: 10px; height: 34px;">
+                                <div
+                                class="progress-bar progress-bar-info progress-bar-striped"
+                                role="progressbar"
+                                aria-valuemin="0"
+                                aria-valuemax="100">
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
         </form>
+        <p id="alerta"></p>
         <script type="text/javascript">
             $(document).ready(function(){
                 $('#fileupload').fileupload({
                     dataType: 'json',
+                    add: function(e, data) {
+                        $('#alerta').text('');
+                        name = $('#name').val();
+                        if (! name) {
+                            $('#alerta').text('Debe ingresar un nombre.');
+                        } else if (name.length > 100) {
+                            $('#alerta').text('El nombre debe ser menor a 100 caracteres.');
+                        } else {
+                            data.submit();
+                        }
+                    },
                     done: function (e, data) {
                         if (data.result['files'][0].error) {
-                            $('.progress').after(
-                                '<p>' + data.result['files'][0].error + '</p>'
-                            );
+                            $('#alerta').text('');
+                            $('#alerta').text(data.result['files'][0].error);
                         } else {
                             location.reload(true);
                         }

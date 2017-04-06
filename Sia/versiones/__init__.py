@@ -89,7 +89,7 @@ def upload_file(folder_id):
     if request.method == 'POST':
         files = []
         filename = request.form['name']
-        if not filename and len(filename) <= 100:
+        if ((not filename) or (len(filename) > 100)):
             files.append({
                 'name': 'none',
                 'error': 'Debe ingresar un nombre menor a 100 caracteres.'
