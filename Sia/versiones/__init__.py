@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Blueprint, render_template, current_app
+from flask import Blueprint, render_template
 from flask import request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from ..forms import Upload_form
