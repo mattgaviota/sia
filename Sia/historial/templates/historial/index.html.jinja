@@ -9,7 +9,9 @@
                 Volver
             </a>
         </div>
-        {% include 'pagination.html.jinja' %}
+        <div class="col-md-6 col-md-offset-2">
+            {% include 'pagination.html.jinja' %}
+        </div>
     </div>
     <div class="list-group">
         {% for revision in revisiones %}
@@ -31,5 +33,8 @@
                 </div>
             </li>
         {% endfor %}
+    </div>
+    <div class="col-md-6 col-md-offset-4">
+        {% include 'pagination.html.jinja' %}
     </div>
 {% endblock %}
