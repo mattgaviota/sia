@@ -52,6 +52,10 @@ def file(file_id):
 @login_required
 def download_file(file_id):
     """download file"""
+    sel_file = Filemanager().get_file(file_id)
+    Revisioner(user=current_user).save_revision(
+        'Descargó el archivo: {}({})'.format(sel_file.name, sel_file.filename)
+    )
     return Filemanager().get_file_from_directory(file_id)
 
 @versiones.route('/delete_file/<file_id>')
@@ -59,10 +63,13 @@ def download_file(file_id):
 @is_admin
 def delete_file(file_id):
     """delete file"""
-    selected_file = Filemanager().get_file(file_id)
-    Filemanager().delete_file(selected_file)
+    sel_file = Filemanager().get_file(file_id)
+    Revisioner(user=current_user).save_revision(
+        'Eliminó el archivo: {}({})'.format(sel_file.name, sel_file.filename)
+    )
+    Filemanager().delete_file(sel_file)
     flash('Archivo eliminado correctamente.', 'success')
-    return redirect(url_for('versiones.files', folder_id=selected_file.id_folder))
+    return redirect(url_for('versiones.files', folder_id=sel_file.id_folder))
 
 @versiones.route('/uploadfolder', methods=['GET', 'POST'])
 @login_required
@@ -73,7 +80,9 @@ def upload_folder():
     if form.validate_on_submit():
         if Filemanager().create_version(form):
             Revisioner(user=current_user).save_revision(
-                'Subió una nueva versión del sistema'
+                'Subió una nueva versión del sistema: {}'.format(
+                    form.version_name.data
+                )
             )
             flash('La versión se creó correctamente.', 'success')
             return redirect(url_for('versiones.index'))
@@ -97,6 +106,9 @@ def upload_file(folder_id):
             return jsonify(files=files)
         file = request.files['file']
         if file and allowed_file(file.filename):
+            Revisioner(user=current_user).save_revision(
+                'Subió archivo: {}({})'.format(filename, file.filename)
+            )
             return Filemanager().upload_file(file, filename, folder_id)
         files.append({
             'name': 'none',
@@ -109,10 +121,14 @@ def upload_file(folder_id):
 @is_admin
 def delete_folder(folder_id):
     """ delete folder and all it's files. """
+    folder = Filemanager().get_folder(folder_id)
     files = Filemanager().get_files_from_folder(folder_id)
     for file in files:
         Filemanager().delete_file(file)
     Filemanager().delete_folder(folder_id)
+    Revisioner(user=current_user).save_revision(
+        'Eliminó la versión: {}'.format(folder.name)
+    )
     flash('Versión eliminada juntos con sus archivos.', 'success')
     return redirect(url_for('versiones.index'))
 
@@ -122,5 +138,9 @@ def delete_folder(folder_id):
 def set_latest(folder_id):
     """ Update the version to set the latest """
     Filemanager().set_latest_version(folder_id)
+    folder = Filemanager().get_folder(folder_id)
+    Revisioner(user=current_user).save_revision(
+        'Actualizó la versión: {}, como la última versión'.format(folder.name)
+    )
     flash('Versión actualizada correctamente.', 'success')
     return redirect(url_for('versiones.index'))
