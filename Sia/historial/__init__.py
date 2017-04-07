@@ -11,7 +11,7 @@ historial = Blueprint(
     template_folder='templates'
 )
 
-PER_PAGE = 10
+PER_PAGE = 20
 
 
 @historial.route('/', defaults={'page': 1})
