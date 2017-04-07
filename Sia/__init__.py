@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # coding=utf-8
 """Restaurador de base de datos basada en Flask"""
-from flask import Flask, url_for, flash, redirect, current_app, session
+from flask import Flask, url_for, flash
+from flask import request, redirect, current_app, session
 from flask_login import LoginManager
 from config import config
 from .home import home
@@ -15,6 +16,11 @@ from .versiones import versiones
 from .modelos.users import Users
 
 login_manager = LoginManager()
+
+def url_for_other_page(page):
+    args = request.view_args.copy()
+    args['page'] = page
+    return url_for(request.endpoint, **args)
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -30,6 +36,8 @@ def create_app(config_name):
     app.register_blueprint(versiones, url_prefix='/versiones')
     app.register_blueprint(admin, url_prefix='/admin')
     app.register_blueprint(api, url_prefix='/api/v1')
+    # Pagination helper
+    app.jinja_env.globals['url_for_other_page'] = url_for_other_page
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Necesitas loguearte para acceder'
     return app
