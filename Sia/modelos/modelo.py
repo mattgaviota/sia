@@ -5,7 +5,7 @@ from pydal import DAL, Field
 
 USUARIO = 'admin'
 PASSW = 'Digio123'
-SERVIDOR = '192.168.0.8'
+SERVIDOR = 'localhost'
 BASE = 'digiomanager'
 
 DB = DAL(

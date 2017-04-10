@@ -27,10 +27,16 @@ def index():
 def last_version():
     """ get the last version """
     last_version = Filemanager().get_last_folder()
-    version = {
-        'nombre': last_version.name,
-        'fecha': last_version.created_at.strftime('%d/%m/%Y')
-    }
+    if last_version:
+        version = {
+            'nombre': last_version.name,
+            'fecha': last_version.created_at.strftime('%d/%m/%Y')
+        }
+    else:
+        version = {
+            'nombre': 'Unknown'
+        }
+
     version = dicttoxml(version, custom_root="version", attr_type=False)
     return Response(version, mimetype='application/xml')
 
@@ -57,13 +63,14 @@ def version(name):
     """ get the files of the version """
     folder = Filemanager().get_folder_by_name(name)
     files = {}
-    for file in Filemanager().get_files_from_folder(folder.id):
-        files[str(file.id)] = {
-            'nombre': file.name,
-            'archivo': file.filename,
-            'tamaño': '{:.2f} Mb'.format(file.filesize / (1024.0 ** 2)),
-            'fecha': file.created_at.strftime('%d/%m/%Y')
-        }
+    if folder:
+        for file in Filemanager().get_files_from_folder(folder.id):
+            files[str(file.id)] = {
+                'nombre': file.name,
+                'archivo': file.filename,
+                'tamaño': '{:.2f} Mb'.format(file.filesize / (1024.0 ** 2)),
+                'fecha': file.created_at.strftime('%d/%m/%Y')
+            }
     files = dicttoxml(
         files,
         custom_root="archivos",
