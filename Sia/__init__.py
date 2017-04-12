@@ -9,6 +9,7 @@ from .home import home
 from .admin import admin
 from .api import api
 from .auth import auth
+from .consolidacion import consolidacion
 from .monitorear import monitorear
 from .historial import historial
 from .restaurar import restaurar
@@ -34,6 +35,7 @@ def create_app(config_name):
     app.register_blueprint(monitorear, url_prefix='/monitorear')
     app.register_blueprint(historial, url_prefix='/historial')
     app.register_blueprint(versiones, url_prefix='/versiones')
+    app.register_blueprint(consolidacion, url_prefix='/consolidacion')
     app.register_blueprint(admin, url_prefix='/admin')
     app.register_blueprint(api, url_prefix='/api/v1')
     # Pagination helper

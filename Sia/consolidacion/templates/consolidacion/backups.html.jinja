@@ -1,0 +1,47 @@
+{% extends "layout.html.jinja" %}
+{% block header %}
+    Backups
+{% endblock %}
+{% block large_content %}
+    <div class="row contenido">
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="{{ url_for('consolidacion.index') }}">
+                Volver
+            </a>
+        </div>
+        <div class="col-md-6 col-md-offset-2">
+            {% include 'pagination.html.jinja' %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <th>Establecimiento</th>
+                        <th>Fecha de último backup</th>
+                        <th>Estado</th>
+                    </thead>
+                    <tbody>
+                        {% for backup in backups %}
+                        <tr>
+                            <td>
+                                {{ backup.establecimientonombre }}
+                            </td>
+                            <td>
+                                {{ backup.backupfecha.strftime('%d/%m/%Y')}}
+                            </td>
+                            <td>
+                                {{ backup.bakcupestado }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-md-offset-4">
+        {% include 'pagination.html.jinja' %}
+    </div>
+{% endblock %}

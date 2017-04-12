@@ -1,0 +1,51 @@
+{% extends "layout.html.jinja" %}
+{% block header %}
+    Estadísticas
+{% endblock %}
+{% block large_content %}
+    <div class="row contenido">
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="{{ url_for('consolidacion.index') }}">
+                Volver
+            </a>
+        </div>
+        <div class="col-md-6 col-md-offset-2">
+            {% include 'pagination.html.jinja' %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <th>Tema</th>
+                        <th>Establecimiento</th>
+                        <th>Cantidad de Registros</th>
+                        <th>Fecha última consolidacion</th>
+                    </thead>
+                    <tbody>
+                        {% for estadistica in estadisticas %}
+                        <tr>
+                            <td>
+                                {{ estadistica.contematica }}
+                            </td>
+                            <td>
+                                {{ estadistica.conestablecimientonombre }}
+                            </td>
+                            <td>
+                                {{ estadistica.concantidad }}
+                            </td>
+                            <td>
+                                {{ estadistica.confecultconsolidacion.strftime('%d/%m/%Y')}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-md-offset-4">
+        {% include 'pagination.html.jinja' %}
+    </div>
+{% endblock %}

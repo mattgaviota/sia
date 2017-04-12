@@ -1,0 +1,24 @@
+{% extends "layout.html.jinja" %}
+{% block header %}
+    Estado de la consolidación
+{% endblock %}
+{% block menu %}
+    <div class="row contenido">
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="{{ url_for('home.index') }}">
+                Volver
+            </a>
+        </div>
+    </div>
+    <div class="list-group">
+        <a href="{{ url_for('consolidacion.estadisticas') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            Estadísticas
+        </a>
+        <a href="{{ url_for('consolidacion.backups') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            Backups
+        </a>
+    </div>
+{% endblock %}
+{% block content %}Elige una opción para revisar{% endblock %}
