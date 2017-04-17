@@ -57,6 +57,7 @@ class Consolidacion(object):
         max = page * per_page
         rows = self.db().select(
             self.db.vista_consolidados_estadisticas_2.ALL,
+            orderby=self.db.vista_consolidados_estadisticas_2.contematica|self.db.vista_consolidados_estadisticas_2.conestablecimientonombre,
             limitby=(min, max)
         )
         return rows
@@ -66,6 +67,7 @@ class Consolidacion(object):
         max = page * per_page
         rows = self.db().select(
             self.db.vista_consolidados_backups_2.ALL,
+            orderby=self.db.vista_consolidados_backups_2.establecimientonombre,
             limitby=(min, max)
         )
         return rows
