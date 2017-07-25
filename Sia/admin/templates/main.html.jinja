@@ -1,8 +1,15 @@
 {% extends "layout.html.jinja" %}
 {% block header %}
-    Sistema Interno de Administración
+  Configuración
 {% endblock %}
 {% block menu %}
+<div class="row contenido">
+    <div class="col-md-2">
+      <a href="{{ url_for('home.index') }}" class="btn btn-primary">
+          Volver
+      </a>
+    </div>
+</div>
 <div class="list-group">
     <a href="{{ url_for('admin.establecimientos_list') }}" class="list-group-item">
         Actualizar datos de establecimientos
@@ -18,9 +25,6 @@
     </a>
     <a href="{{ url_for('auth.register') }}" class="list-group-item">
         Registrar usuarios
-    </a>
-    <a href="{{ url_for('home.index') }}" class="list-group-item">
-        Volver
     </a>
 </div>
 {% endblock %}

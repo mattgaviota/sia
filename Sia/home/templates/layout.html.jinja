@@ -34,12 +34,9 @@
             <nav class="navbar navbar-inverse">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        {% if current_user.admin %}
-                            <a href="{{ url_for('admin.index') }}" class="navbar-brand">
-                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                                Configuración
-                            </a>
-                        {% endif %}
+                        <h2 class="brand-header">
+                          Sistema Interno de Administración
+                        </h2>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
@@ -56,12 +53,33 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ url_for('auth.change_pass') }}">Cambiar Password</a></li>
+                                        <li>
+                                          <a href="{{ url_for('auth.change_pass') }}">
+                                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                            Cambiar Password
+                                          </a>
+                                        </li>
+                                        {% if current_user.admin %}
+                                          <li>
+                                            <a href="{{ url_for('admin.index') }}">
+                                              <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                              Configuración
+                                            </a>
+                                          </li>
+                                        {% endif %}
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="{{ url_for('auth.logout') }}">Salir</a></li>
+                                        <li>
+                                          <a href="{{ url_for('auth.logout') }}">
+                                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                                            Salir
+                                          </a>
+                                        </li>
                                     </ul>
                                 {% else %}
-                                    <a href="{{ url_for('auth.login')}}">Ingresar</a>
+                                    <a href="{{ url_for('auth.login')}}">
+                                      <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                      Ingresar
+                                    </a>
                                 {% endif %}
 
                             </li>
