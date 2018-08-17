@@ -4,9 +4,9 @@ from pydal import DAL, Field
 
 
 USUARIO = 'admin'
-PASSW = 'Digio123'
+PASSW = 'admin'
 SERVIDOR = 'localhost'
-BASE = 'digiomanager'
+BASE = 'database'
 
 DB = DAL(
     "postgres://{0}:{1}@{2}/{3}".format(USUARIO, PASSW, SERVIDOR, BASE),
